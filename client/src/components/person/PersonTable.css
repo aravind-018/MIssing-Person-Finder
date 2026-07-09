@@ -1,0 +1,160 @@
+.table-container{
+    margin-top:20px;
+    border-radius:16px;
+    overflow:hidden;
+    background:#111827;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.person-table{
+    width:100%;
+    border-collapse:collapse;
+    color:#e5e7eb;
+}
+
+.person-table thead{
+    background:#1f2937;
+}
+
+.person-table th{
+    padding:18px;
+    text-align:left;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.5px;
+    color:#f9fafb;
+}
+
+.person-table td{
+    padding:16px 18px;
+    border-top:1px solid #374151;
+}
+
+.person-table tbody tr{
+    transition:.25s;
+}
+
+.person-table tbody tr:nth-child(even){
+    background:#1a2433;
+}
+
+.person-table tbody tr:hover{
+    background:#273449;
+}
+
+.photo-cell{
+    width:90px;
+}
+
+.person-photo{
+    width:65px;
+    height:65px;
+    object-fit:cover;
+    border-radius:12px;
+    border:2px solid #374151;
+    transition:.3s;
+}
+
+.person-photo:hover{
+    transform:scale(1.08);
+    border-color:#3b82f6;
+}
+
+.no-image{
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.action-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.action-buttons button{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    color:#fff;
+    transition:.25s;
+}
+
+.view-btn{
+    background:#2563eb;
+}
+
+.edit-btn{
+    background:#f59e0b;
+}
+
+.delete-btn{
+    background:#dc2626;
+}
+
+.action-buttons button:hover{
+    transform:translateY(-2px);
+    opacity:.9;
+}
+
+.no-data{
+    text-align:center;
+    padding:30px;
+    color:#9ca3af;
+}
+
+.search-container{
+    width:100%;
+    margin:20px 0;
+}
+
+.search-box{
+    width:100%;
+    padding:14px 18px;
+    box-sizing:border-box;
+}
+
+.search-box{
+    width:100%;
+    display:block;
+    padding:12px 18px;
+    margin:20px 0;
+    box-sizing:border-box;
+    border:1px solid #374151;
+    border-radius:10px;
+    font-size:16px;
+    background:#1f2937;
+    color:#fff;
+    outline:none;
+    box-sizing:border-box;
+}
+
+.search-box::placeholder{
+    color:#9ca3af;
+}
+
+.search-box:focus{
+    border-color:#3b82f6;
+    box-shadow:0 0 0 3px rgba(59,130,246,.25);
+}
+
+.filters{
+    display:flex;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.filters select{
+    padding:10px 14px;
+    border:1px solid #374151;
+    border-radius:8px;
+    background:#1f2937;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+    outline:none;
+}
+
+.filters select:focus{
+    border-color:#3b82f6;
+}
