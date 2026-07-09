@@ -293,3 +293,33 @@
     transform:translateY(-5px);
     box-shadow:0 10px 20px rgba(0,0,0,.12);
 }
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  min-width: 150px;
+}
+
+.reset-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #ef4444;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reset-btn:hover {
+  background: #dc2626;
+}
