@@ -1,0 +1,83 @@
+.recent-cases {
+  margin-top: 35px;
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.recent-cases h2 {
+  margin-bottom: 18px;
+  color: white;
+}
+
+.recent-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.recent-card:hover {
+  background: #293445;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+}
+
+.recent-card:last-child {
+  margin-bottom: 0;
+}
+
+.recent-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.recent-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-info h3 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+}
+
+.recent-info p {
+  margin: 4px 0 10px;
+  color: #9ca3af;
+}
+
+.recent-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.status-badge {
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-missing {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.status-found {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.recent-details small {
+  color: #9ca3af;
+}

@@ -4,6 +4,9 @@ import cors from "cors";
 import personRoutes from "./routes/personRoutes.js";
 import connectDB from "./config/db.js";
 import path from "path";
+import authRoutes from "./routes/authRoutes.js";
+
+
 
 dotenv.config();
 
@@ -15,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-
+app.use("/api/auth", authRoutes);
 app.use("/api/person", personRoutes);
 
 app.get("/", (req, res) => {

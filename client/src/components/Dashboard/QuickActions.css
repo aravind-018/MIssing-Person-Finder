@@ -1,0 +1,36 @@
+.quick-actions {
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.quick-actions h2 {
+  margin-bottom: 18px;
+  color: white;
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: #293445;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.action-card:last-child {
+  margin-bottom: 0;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  background: #334155;
+}
+
+.action-icon {
+  font-size: 22px;
+  color: #60a5fa;
+}

@@ -1,0 +1,41 @@
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 35px;
+}
+
+.chart-card {
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 20px;
+  height: 380px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h2 {
+  margin-bottom: 20px;
+  color: white;
+}
+
+.chart-card canvas {
+  max-height: 280px !important;
+}
+
+.chart-note {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #9ca3af;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.full-width canvas {
+  max-height: 300px !important;
+}
