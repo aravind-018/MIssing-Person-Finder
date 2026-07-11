@@ -25,9 +25,9 @@ export const getAllUsers = async (req, res) => {
 export const getPendingUsers = async (req, res) => {
   try {
     const users = await User.find({
-      status: "pending",
-      role: "user",
-    }).select("-password");
+  status: "pending",
+  role: { $ne: "admin" },
+}).select("-password");
 
     res.status(200).json(users);
   } catch (error) {
@@ -110,6 +110,121 @@ export const rejectUser = async (req, res) => {
     res.status(200).json({
       message: "User rejected successfully.",
       user: updatedUser,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+/*
+    SUSPEND USER
+*/
+
+export const suspendUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    if (user.role === "admin") {
+      return res.status(400).json({
+        message: "Administrator accounts cannot be suspended.",
+      });
+    }
+
+    user.status = "suspended";
+
+    await user.save();
+
+    const updatedUser = await User.findById(user._id).select("-password");
+
+    res.status(200).json({
+      message: "Officer suspended successfully.",
+      user: updatedUser,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+/*
+    REACTIVATE USER
+*/
+
+export const reactivateUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    if (user.role === "admin") {
+      return res.status(400).json({
+        message: "Administrator accounts cannot be reactivated.",
+      });
+    }
+
+    user.status = "active";
+
+    await user.save();
+
+    const updatedUser = await User.findById(user._id).select("-password");
+
+    res.status(200).json({
+      message: "Officer reactivated successfully.",
+      user: updatedUser,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+/*
+    DELETE USER
+*/
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    if (user.role === "admin") {
+      return res.status(400).json({
+        message: "Administrator accounts cannot be deleted.",
+      });
+    }
+
+    await User.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "Officer deleted successfully.",
     });
 
   } catch (error) {

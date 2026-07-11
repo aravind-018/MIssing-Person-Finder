@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../components/common/ConfirmModal";
+import useConfirmModal from "../hooks/useConfirmModal";
+import {
+  showSuccess,
+  showError,
+} from "../utils/toast";
+
 
 import {
   getAllPersons,
@@ -15,7 +22,13 @@ function ManagePersons() {
   const [gender, setGender] = useState("All");
   const [age, setAge] = useState("All");
   const [status, setStatus] = useState("All");
-  
+  const {
+  confirmModal,
+  openConfirmModal,
+  closeConfirmModal,
+} = useConfirmModal();
+
+
 
   function handleEdit(person) {
     navigate("/register", {
@@ -24,22 +37,33 @@ function ManagePersons() {
   }
 
   async function handleDelete(id) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this person?"
-    );
+  openConfirmModal({
+    title: "Delete Missing Person",
+    message: "Are you sure you want to permanently delete this missing person record?",
+    confirmText: "Delete",
+    confirmClass: "confirm-delete",
 
-    if (!confirmDelete) return;
+    onConfirm: async () => {
+      try {
+        await deletePerson(id);
 
-    try {
-      await deletePerson(id);
+        setPersons((prevPersons) =>
+          prevPersons.filter((person) => person._id !== id)
+        );
 
-      setPersons((prevPersons) =>
-        prevPersons.filter((person) => person._id !== id)
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  }
+        showSuccess("Missing person deleted successfully.");
+
+        closeConfirmModal();
+      } catch (error) {
+        console.error(error);
+
+        showError("Failed to delete missing person.");
+
+        closeConfirmModal();
+      }
+    },
+  });
+}
 
  useEffect(() => {
   (async () => {
@@ -147,6 +171,16 @@ const filteredPersons = persons.filter(
         onDelete={handleDelete}
         onEdit={handleEdit}
       />
+
+      <ConfirmModal
+  isOpen={confirmModal.isOpen}
+  title={confirmModal.title}
+  message={confirmModal.message}
+  confirmText={confirmModal.confirmText}
+  confirmClass={confirmModal.confirmClass}
+  onCancel={closeConfirmModal}
+  onConfirm={confirmModal.onConfirm}
+/>
     </div>
   );
 }

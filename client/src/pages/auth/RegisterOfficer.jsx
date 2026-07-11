@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { registerOfficer } from "../../services/authService";
 import "../../styles/RegisterOfficer.css";
 
 import {
@@ -8,6 +10,7 @@ import {
 } from "react-icons/fa";
 
 function RegisterOfficer() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,11 +30,29 @@ function RegisterOfficer() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log(formData);
-  };
+  try {
+    await registerOfficer({
+      ...formData,
+      role: "officer",
+      status: "pending",
+    });
+
+    alert(
+      "Registration submitted successfully!\nYour account is pending administrator approval."
+    );
+
+    navigate("/");
+
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Registration failed. Please try again."
+    );
+  }
+};
 
   return (
     <div className="register-officer-page">

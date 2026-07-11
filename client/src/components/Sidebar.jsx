@@ -46,7 +46,7 @@ function Sidebar() {
 },
 
     {
-      title: "Manage Users",
+      title: "Officer Management",
       icon: <FaUserShield />,
       path: "/manage-users",
     },

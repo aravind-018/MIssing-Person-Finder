@@ -8,6 +8,12 @@ import {
 } from "../services/personService";
 import { useParams } from "react-router-dom";
 import { getPersonById } from "../services/api";
+import useConfirmModal from "../hooks/useConfirmModal";
+import ConfirmModal from "../components/common/ConfirmModal";
+import {
+  showSuccess,
+  showError,
+} from "../utils/toast";
 
 function RegisterPerson() {
   const { id } = useParams();
@@ -30,6 +36,12 @@ const [formData, setFormData] = useState({
 
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+
+  const {
+  confirmModal,
+  openConfirmModal,
+  closeConfirmModal,
+} = useConfirmModal();
 
 useEffect(() => {
   if (!editingPerson) return;
@@ -59,7 +71,7 @@ useEffect(() => {
       setEditingPerson(response.data);
     } catch (error) {
       console.error(error);
-      alert("Failed to load person details.");
+      showError("Failed to load person details.");
     }
   };
 
@@ -78,7 +90,7 @@ useEffect(() => {
   const selectedImages = Array.from(e.target.files);
 
   if (selectedImages.length > 5) {
-    alert("You can upload a maximum of 5 images.");
+    showError("You can upload a maximum of 5 images.");
     return;
   }
 
@@ -127,21 +139,76 @@ images.forEach((image) => {
 });
 
 if (editingPerson) {
-  await updatePerson(editingPerson._id, data);
-  alert("Person Updated Successfully!");
-} else {
-  await registerPerson(data);
-  alert("Person Registered Successfully!");
+  openConfirmModal({
+    title: "Update Missing Person",
+    message: "Are you sure you want to save these changes?",
+    confirmText: "Update",
+    confirmClass: "confirm-approve",
+
+    onConfirm: async () => {
+      try {
+        await updatePerson(editingPerson._id, data);
+
+        showSuccess("Person updated successfully.");
+
+        closeConfirmModal();
+
+        navigate("/manage-persons");
+      } catch (error) {
+        console.error(error);
+
+        showError("Update failed.");
+
+        closeConfirmModal();
+      }
+    },
+  });
+
+  return;
+}else {
+  openConfirmModal({
+    title: "Register Missing Person",
+    message: "Are you sure you want to register this missing person?",
+    confirmText: "Register",
+    confirmClass: "confirm-approve",
+
+    onConfirm: async () => {
+      try {
+        await registerPerson(data);
+
+        showSuccess("Person registered successfully.");
+
+        closeConfirmModal();
+
+        navigate("/manage-persons");
+      } catch (error) {
+        console.error(error);
+
+        showError("Registration failed.");
+
+        closeConfirmModal();
+      }
+    },
+  });
+
+  return;
+
 }
 
-    navigate("/manage-persons");
-  } catch (error) {
-    console.error(error);
-    alert(editingPerson ? "Update Failed" : "Registration Failed");
-  }
+} catch (error) {
+  console.error(error);
+
+  showError(
+    editingPerson
+      ? "Update failed."
+      : "Registration failed."
+  );
+}
 };
-  console.log(images);
-  return (
+
+console.log(images);
+
+return (
     <div className="page">
       
 
@@ -186,6 +253,8 @@ if (editingPerson) {
 
               onChange={handleChange}
 
+              placeholder="Name"
+
               required
 
             />
@@ -207,6 +276,8 @@ if (editingPerson) {
               value={formData.age}
 
               onChange={handleChange}
+
+              placeholder="Age"
 
               required
 
@@ -264,6 +335,8 @@ if (editingPerson) {
 
               onChange={handleChange}
 
+              placeholder="Address"
+
               required
 
             />
@@ -287,6 +360,8 @@ if (editingPerson) {
               value={formData.contact}
 
               onChange={handleChange}
+
+              placeholder="Contact Number"
 
               required
 
@@ -459,6 +534,15 @@ if (editingPerson) {
 
 </form>
       </div>
+      <ConfirmModal
+  isOpen={confirmModal.isOpen}
+  title={confirmModal.title}
+  message={confirmModal.message}
+  confirmText={confirmModal.confirmText}
+  confirmClass={confirmModal.confirmClass}
+  onCancel={closeConfirmModal}
+  onConfirm={confirmModal.onConfirm}
+/>
     </div>
   );
 }

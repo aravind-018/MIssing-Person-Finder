@@ -1,26 +1,80 @@
 import { useEffect, useState } from "react";
 import "../styles/ManageUsers.css";
+import UserCard from "../components/user/UserCard";
+import OfficerStatCard from "../components/user/OfficerStatCard";
+import ConfirmModal from "../components/common/ConfirmModal";
+import useConfirmModal from "../hooks/useConfirmModal";
+import {
+  showSuccess,
+  showError,
+} from "../utils/toast";
 
 import {
-  getPendingUsers,
+  getAllUsers,
   approveUser,
   rejectUser,
+  suspendUser,
+  reactivateUser,
+  deleteUser,
 } from "../services/userService";
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("pending");
+
+
+  const pendingUsers = users.filter(
+  (user) => user.status === "pending"
+);
+
+const activeUsers = users.filter(
+  (user) => user.status === "active"
+);
+
+const suspendedUsers = users.filter(
+  (user) => user.status === "suspended"
+);
+
+const rejectedUsers = users.filter(
+  (user) => user.status === "rejected"
+);
+
+let displayedUsers = [];
+
+switch (activeTab) {
+  case "active":
+    displayedUsers = activeUsers;
+    break;
+
+  case "suspended":
+    displayedUsers = suspendedUsers;
+    break;
+
+  case "rejected":
+    displayedUsers = rejectedUsers;
+    break;
+
+  default:
+    displayedUsers = pendingUsers;
+}
+
+const {
+  confirmModal,
+  openConfirmModal,
+  closeConfirmModal,
+} = useConfirmModal();
 
   useEffect(() => {
-    fetchPendingUsers();
+    fetchUsers();
 
   }, []);
 
-  const fetchPendingUsers = async () => {
+  const fetchUsers  = async () => {
     try {
       setLoading(true);
 
-      const data = await getPendingUsers();
+      const data = await getAllUsers();
 
       setUsers(data);
     } catch (error) {
@@ -34,13 +88,13 @@ function ManageUsers() {
   try {
     await approveUser(id);
 
-    alert("User approved successfully!");
+    showSuccess("Officer approved successfully.");
 
-    fetchPendingUsers();
+    fetchUsers();
   } catch (error) {
     console.error(error);
 
-    alert("Failed to approve user.");
+    showError("Failed to approve officer.");
   }
 };
 
@@ -48,13 +102,55 @@ const handleReject = async (id) => {
   try {
     await rejectUser(id);
 
-    alert("User rejected successfully!");
+   showSuccess("Officer rejected successfully.");
 
-    fetchPendingUsers();
+    fetchUsers();
   } catch (error) {
     console.error(error);
 
-    alert("Failed to reject user.");
+    showError("Failed to reject officer.");
+  }
+};
+
+const handleSuspend = async (id) => {
+  try {
+    await suspendUser(id);
+
+    showSuccess("Officer suspended successfully.");
+
+    fetchUsers();
+  } catch (error) {
+    console.error(error);
+
+    showError("Failed to suspend officer.");
+  }
+};
+
+const handleReactivate = async (id) => {
+  try {
+    await reactivateUser(id);
+
+    showSuccess("Officer reactivated successfully.");
+
+    fetchUsers();
+  } catch (error) {
+    console.error(error);
+
+    showError("Failed to reactivate officer.");
+  }
+};
+
+const handleDelete = async (id) => {
+  try {
+    await deleteUser(id);
+
+    showSuccess("Officer deleted successfully.");
+
+    fetchUsers();
+  } catch (error) {
+    console.error(error);
+
+    showError("Failed to delete officer.");
   }
 };
 
@@ -68,56 +164,160 @@ const handleReject = async (id) => {
 
   return (
     <div className="manage-users-page">
-      <h1>Pending Police Accounts</h1>
+      <h1>Officer Management</h1>
 
       <p className="pending-count">
-        Pending Requests : {users.length}
+      Manage officer accounts, approvals and permissions.
       </p>
 
-      {users.length === 0 ? (
+
+      <div className="officer-stats">
+
+  <OfficerStatCard
+    title="Total Officers"
+    value={users.length}
+    color="#38bdf8"
+  />
+
+  <OfficerStatCard
+    title="Pending"
+    value={pendingUsers.length}
+    color="#facc15"
+  />
+
+  <OfficerStatCard
+    title="Active"
+    value={activeUsers.length}
+    color="#22c55e"
+  />
+
+  <OfficerStatCard
+    title="Suspended"
+    value={suspendedUsers.length}
+    color="#ef4444"
+  />
+
+</div>
+
+<div className="officer-tabs">
+
+  <button
+    className={activeTab === "pending" ? "active" : ""}
+    onClick={() => setActiveTab("pending")}
+  >
+    Pending ({pendingUsers.length})
+  </button>
+
+  <button
+    className={activeTab === "active" ? "active" : ""}
+    onClick={() => setActiveTab("active")}
+  >
+    Active ({activeUsers.length})
+  </button>
+
+  <button
+    className={activeTab === "suspended" ? "active" : ""}
+    onClick={() => setActiveTab("suspended")}
+  >
+    Suspended ({suspendedUsers.length})
+  </button>
+
+  <button
+    className={activeTab === "rejected" ? "active" : ""}
+    onClick={() => setActiveTab("rejected")}
+  >
+    Rejected ({rejectedUsers.length})
+  </button>
+
+</div>
+
+
+
+
+      {displayedUsers.length === 0 ? (
         <div className="empty-state">
           No pending approval requests.
         </div>
       ) : (
         <div className="users-grid">
-          {users.map((user) => (
-            <div className="user-card" key={user._id}>
-              <h2>{user.name}</h2>
+          {displayedUsers.map((user) => (
+ <UserCard
+  key={user._id}
+  user={user}
+  onApprove={(id) =>
+    openConfirmModal({
+      title: "Approve Officer",
+      message: "Are you sure you want to approve this officer?",
+      confirmText: "Approve",
+      confirmClass: "confirm-approve",
+      onConfirm: async () => {
+        await handleApprove(id);
+        closeConfirmModal();
+      },
+    })
+  }
+  onReject={(id) =>
+    openConfirmModal({
+      title: "Reject Officer",
+      message: "Are you sure you want to reject this officer?",
+      confirmText: "Reject",
+      confirmClass: "confirm-reject",
+      onConfirm: async () => {
+        await handleReject(id);
+        closeConfirmModal();
+      },
+    })
+  }
+  onSuspend={(id) =>
+    openConfirmModal({
+      title: "Suspend Officer",
+      message: "Are you sure you want to suspend this officer?",
+      confirmText: "Suspend",
+      confirmClass: "confirm-suspend",
+      onConfirm: async () => {
+        await handleSuspend(id);
+        closeConfirmModal();
+      },
+    })
+  }
+  onReactivate={(id) =>
+    openConfirmModal({
+      title: "Reactivate Officer",
+      message: "Are you sure you want to reactivate this officer?",
+      confirmText: "Reactivate",
+      confirmClass: "confirm-reactivate",
+      onConfirm: async () => {
+        await handleReactivate(id);
+        closeConfirmModal();
+      },
+    })
+  }
+  onDelete={(id) =>
+    openConfirmModal({
+      title: "Delete Officer",
+      message: "This action cannot be undone. Delete this officer?",
+      confirmText: "Delete",
+      confirmClass: "confirm-delete",
+      onConfirm: async () => {
+        await handleDelete(id);
+        closeConfirmModal();
+      },
+    })
+  }
+/>
+))}
 
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
 
-              <p>
-                <strong>Role:</strong> {user.role}
-              </p>
+      <ConfirmModal
+  isOpen={confirmModal.isOpen}
+  title={confirmModal.title}
+  message={confirmModal.message}
+  confirmText={confirmModal.confirmText}
+  confirmClass={confirmModal.confirmClass}
+  onCancel={closeConfirmModal}
+  onConfirm={confirmModal.onConfirm}
+/>
 
-              <p>
-                <strong>Status:</strong> {user.status}
-              </p>
-
-              <p>
-                <strong>Joined:</strong>{" "}
-                {new Date(user.createdAt).toLocaleDateString()}
-              </p>
-
-              <div className="user-actions">
-              <button
-  className="approve-btn"
-  onClick={() => handleApprove(user._id)}
->
-  Approve
-</button>
-
-                <button
-  className="reject-btn"
-  onClick={() => handleReject(user._id)}
->
-  Reject
-</button>
-              </div>
-            </div>
-          ))}
         </div>
       )}
     </div>

@@ -23,3 +23,21 @@ export const rejectUser = async (id) => {
   const response = await api.put(`/users/${id}/reject`);
   return response.data;
 };
+
+// Suspend a user
+export const suspendUser = async (id) => {
+  const response = await api.put(`/users/${id}/suspend`);
+  return response.data;
+};
+
+// Reactivate a user
+export const reactivateUser = async (id) => {
+  const response = await api.put(`/users/${id}/reactivate`);
+  return response.data;
+};
+
+// Delete a user
+export const deleteUser = async (id) => {
+  const response = await api.delete(`/users/${id}`);
+  return response.data;
+};

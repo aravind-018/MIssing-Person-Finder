@@ -12,7 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ManageUsers from "./pages/ManageUsers";
 import MainLayout from "./layouts/MainLayout";
 import RegisterOfficer from "./pages/auth/RegisterOfficer";
-
+    
 function App() {
   return (
     <BrowserRouter>

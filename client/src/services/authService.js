@@ -10,3 +10,9 @@ export const loginUser = async (email, password) => {
 
   return response.data;
 };
+
+export const registerOfficer = async (officerData) => {
+  const response = await axios.post(`${API_URL}/register`, officerData);
+
+  return response.data;
+};

@@ -5,6 +5,9 @@ import {
   getPendingUsers,
   approveUser,
   rejectUser,
+  suspendUser,
+  reactivateUser,
+  deleteUser,
 } from "../controllers/userController.js";
 
 import {
@@ -27,6 +30,27 @@ router.put(
   protect,
   adminOnly,
   rejectUser
+);
+
+router.put(
+  "/:id/suspend",
+  protect,
+  adminOnly,
+  suspendUser
+);
+
+router.put(
+  "/:id/reactivate",
+  protect,
+  adminOnly,
+  reactivateUser
+);
+
+router.delete(
+  "/:id",
+  protect,
+  adminOnly,
+  deleteUser
 );
 
 export default router;
