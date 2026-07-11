@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPersonById } from "../services/api";
-import "../styles/PersonDetails.css";
+import { getPersonById } from "../../services/api";
+import "../../styles/PersonDetails.css";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import {
     FaUser,
     FaBirthdayCake,
@@ -40,13 +41,14 @@ function PersonDetails() {
     };
 
     if (!person) {
-        return <h2>Loading...</h2>;
+        return <LoadingSpinner text="Loading Officers..." />
     }
 
     return (
   <div className="person-details-container">
     <div className="page-header">
-<h1>Case Details</h1>
+
+<h2 className="page-title">Case Details</h2>
 
 <p className="subtitle">
     {person.caseNumber}
@@ -197,7 +199,7 @@ function PersonDetails() {
 
 <button
     className="details-edit-btn"
-    onClick={() => navigate(`/person/edit/${person._id}`)}
+    onClick={() => navigate(`/admin/person/edit/${person._id}`)}
 >
     ✏ Edit
 </button>

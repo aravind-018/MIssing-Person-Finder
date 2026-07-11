@@ -12,7 +12,45 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerOfficer = async (officerData) => {
-  const response = await axios.post(`${API_URL}/register`, officerData);
+  const token = localStorage.getItem("token");
+
+  const response = await axios.post(
+    `${API_URL}/register`,
+    officerData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const getProfile = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.get(`${API_URL}/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const changePassword = async (passwordData) => {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.put(
+    `${API_URL}/change-password`,
+    passwordData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   return response.data;
 };

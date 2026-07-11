@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerOfficer } from "../../services/authService";
 import "../../styles/RegisterOfficer.css";
+import {
+  showSuccess,
+  showError,
+} from "../../utils/toast";
 
 import {
   FaUserShield,
@@ -11,6 +15,8 @@ import {
 
 function RegisterOfficer() {
   const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+const isAdmin = currentUser?.role === "admin";
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,22 +41,28 @@ const handleSubmit = async (e) => {
 
   try {
     await registerOfficer({
-      ...formData,
-      role: "officer",
-      status: "pending",
-    });
+  ...formData,
+  role: "officer",
+  status: "pending",
+});
 
-    alert(
-      "Registration submitted successfully!\nYour account is pending administrator approval."
-    );
+if (isAdmin) {
+  showSuccess("Officer registered successfully.");
 
-    navigate("/");
+  navigate("/admin/manage-users");
+} else {
+  showSuccess(
+  "Registration submitted successfully. Please wait for administrator approval."
+);
+
+  navigate("/");
+}
 
   } catch (error) {
-    alert(
-      error.response?.data?.message ||
-      "Registration failed. Please try again."
-    );
+    showError(
+  error.response?.data?.message ||
+  "Registration failed. Please try again."
+);
   }
 };
 
@@ -66,13 +78,15 @@ const handleSubmit = async (e) => {
             <FaUserShield />
           </div>
 
-          <h2>Officer Registration</h2>
+          <h2 className="page-title" >
+  {isAdmin ? "Register Officer" : "Officer Registration"}
+</h2>
 
-          <p className="register-subtitle">
-            Create your official GodsEye account.
-            <br />
-            Your account will remain pending until approved by an administrator.
-          </p>
+<p className="register-subtitle">
+  {isAdmin
+    ? "Create a new officer account for the GodsEye system."
+    : "Create your official GodsEye account. Your account will remain pending until approved by an administrator."}
+</p>
 
         </div>
 
@@ -237,9 +251,8 @@ const handleSubmit = async (e) => {
           </div>
 
           <button type="submit">
-            Register Officer
-          </button>
-
+  {isAdmin ? "Create Officer" : "Submit Registration"}
+</button>
         </form>
 
       </div>

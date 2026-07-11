@@ -380,3 +380,25 @@ body{
     transition:background-color 9999s;
 
 }
+
+.register-link {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.register-link p {
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #60A5FA;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.register-link a:hover {
+  color: #93C5FD;
+  text-decoration: underline;
+}

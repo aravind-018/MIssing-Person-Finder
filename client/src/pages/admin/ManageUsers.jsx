@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import "../styles/ManageUsers.css";
-import UserCard from "../components/user/UserCard";
-import OfficerStatCard from "../components/user/OfficerStatCard";
-import ConfirmModal from "../components/common/ConfirmModal";
-import useConfirmModal from "../hooks/useConfirmModal";
+import "../../styles/ManageUsers.css";
+import UserCard from "../../components/user/UserCard";
+import OfficerStatCard from "../../components/user/OfficerStatCard";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import useConfirmModal from "../../hooks/useConfirmModal";
+import { FaSearch } from "react-icons/fa";
 import {
   showSuccess,
   showError,
-} from "../utils/toast";
-
+} from "../../utils/toast";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 import {
   getAllUsers,
   approveUser,
@@ -16,13 +17,13 @@ import {
   suspendUser,
   reactivateUser,
   deleteUser,
-} from "../services/userService";
+} from "../../services/userService";
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("pending");
-
+  const [searchTerm, setSearchTerm] = useState("");
 
   const pendingUsers = users.filter(
   (user) => user.status === "pending"
@@ -58,6 +59,18 @@ switch (activeTab) {
   default:
     displayedUsers = pendingUsers;
 }
+
+displayedUsers = displayedUsers.filter((user) => {
+  const search = searchTerm.toLowerCase();
+
+  return (
+    user.name.toLowerCase().includes(search) ||
+    user.badgeNumber.toLowerCase().includes(search) ||
+    user.email.toLowerCase().includes(search) ||
+    user.phone.includes(search) ||
+    user.station.toLowerCase().includes(search)
+  );
+});
 
 const {
   confirmModal,
@@ -97,6 +110,8 @@ const {
     showError("Failed to approve officer.");
   }
 };
+
+
 
 const handleReject = async (id) => {
   try {
@@ -157,19 +172,33 @@ const handleDelete = async (id) => {
   if (loading) {
     return (
       <div className="manage-users-page">
-        <h2>Loading pending users...</h2>
+        <LoadingSpinner text="Loading Officers..." />
       </div>
     );
   }
 
   return (
     <div className="manage-users-page">
-      <h1>Officer Management</h1>
+     
+      <h2 className="page-title">Officer Management</h2>
 
       <p className="pending-count">
       Manage officer accounts, approvals and permissions.
       </p>
 
+<div className="search-container">
+    <div className="search-box">
+        <FaSearch className="search-icon" />
+
+        <input
+            type="text"
+            placeholder="Search by name, badge number, email, phone or station..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+        />
+    </div>
+</div>
 
       <div className="officer-stats">
 

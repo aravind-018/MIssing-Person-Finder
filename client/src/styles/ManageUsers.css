@@ -369,3 +369,57 @@
   }
 
 }
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin: 25px 0 30px;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 650px;
+
+    display: flex;
+    align-items: center;
+
+    background: #1b2435;
+
+    border: 1px solid rgba(124, 203, 255, 0.2);
+    border-radius: 12px;
+
+    transition: .3s;
+}
+
+.search-box:hover {
+    border-color: rgba(124, 203, 255, .45);
+}
+
+.search-box:focus-within {
+    border-color: #7CCBFF;
+    box-shadow: 0 0 0 4px rgba(124, 203, 255, .15);
+}
+
+.search-icon {
+    margin-left: 18px;
+    color: #7CCBFF;
+    font-size: 16px;
+}
+
+.search-input {
+    flex: 1;
+
+    padding: 14px 18px;
+
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: white;
+    font-size: 15px;
+    font-family: "Poppins", sans-serif;
+}
+
+.search-input::placeholder {
+    color: #8fa5c2;
+}

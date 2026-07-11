@@ -1,27 +1,8 @@
-import { FaUserPlus, FaUsers, FaUserShield } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./QuickActions.css";
 
-function QuickActions() {
+function QuickActions({ actions }) {
   const navigate = useNavigate();
-
-  const actions = [
-  {
-    title: "Register Missing Person",
-    icon: <FaUserPlus />,
-    path: "/register",
-  },
-  {
-    title: "Manage Missing Persons",
-    icon: <FaUsers />,
-    path: "/manage-persons",
-  },
-  {
-    title: "Manage Users",
-    icon: <FaUserShield />,
-    path: "/manage-users",
-  },
-];
 
   return (
     <div className="quick-actions">
@@ -33,7 +14,9 @@ function QuickActions() {
           className="action-card"
           onClick={() => navigate(action.path)}
         >
-          <span className="action-icon">{action.icon}</span>
+          <span className="action-icon">
+            {action.icon}
+          </span>
 
           <span>{action.title}</span>
         </div>

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmModal from "../components/common/ConfirmModal";
-import useConfirmModal from "../hooks/useConfirmModal";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import useConfirmModal from "../../hooks/useConfirmModal";
 import {
   showSuccess,
   showError,
-} from "../utils/toast";
+} from "../../utils/toast";
 
 
 import {
   getAllPersons,
   deletePerson,
-} from "../services/personService";
+} from "../../services/personService";
 
-import PersonTable from "../components/person/PersonTable";
+import PersonTable from "../../components/person/PersonTable";
 
 function ManagePersons() {
   const [persons, setPersons] = useState([]);
@@ -30,11 +30,11 @@ function ManagePersons() {
 
 
 
-  function handleEdit(person) {
-    navigate("/register", {
-      state: person,
-    });
-  }
+function handleEdit(person) {
+  navigate("/admin/register", {
+    state: person,
+  });
+}
 
   async function handleDelete(id) {
   openConfirmModal({
@@ -110,7 +110,8 @@ const filteredPersons = persons.filter(
     color: "#fff",
   }}
 >
-      <h1>Manage Missing Persons</h1>
+      
+      <h2 className="page-title">Manage Missing Persons</h2>
 
      <div className="search-container">
   <input

@@ -10,10 +10,11 @@
 }
 
 .details-card {
-    background: white;
-    border-radius: 10px;
+    background: #182235;
+    border: 1px solid rgba(124, 203, 255, 0.15);
+    border-radius: 16px;
     padding: 25px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
 .gallery {
@@ -45,8 +46,8 @@
     height:420px;
     border-radius:12px;
     overflow:hidden;
-    background:#f2f2f2;
-    border:1px solid #ddd;
+     background:#111827;
+    border:1px solid rgba(124,203,255,.2);
 }
 
 .main-image{
@@ -94,13 +95,14 @@
     margin-bottom:35px;
 }
 
-.summary-card{
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    text-align:center;
-    box-shadow:0 3px 10px rgba(0,0,0,.1);
-    transition:.3s;
+.summary-card {
+    background: #202c42;
+    border: 1px solid rgba(124,203,255,.12);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,.25);
+    transition: .3s;
 }
 
 .summary-card:hover{
@@ -114,14 +116,11 @@
 }
 
 .summary-card h4{
-    margin:8px 0;
-    color:#555;
+    color:#9fb3c8;
 }
 
 .summary-card p{
-    font-size:20px;
-    font-weight:bold;
-    color:#111827;
+    color:#ffffff;
 }
 
 .status-card .summary-icon{
@@ -139,20 +138,29 @@
 }
 
 .detail-item {
-    background: #f8f9fa;
+    background: #202c42;
+    border: 1px solid rgba(124,203,255,.12);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .detail-item strong {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 8px;
-    color: #333;
+
+    color: #7CCBFF;
+    font-weight: 600;
+}
+
+.detail-item strong svg {
+    color: #7CCBFF !important;
 }
 
 .detail-item p {
     margin: 0;
-    color: #555;
+    color:#e5e7eb;
 }
 
 .back-button-container {
@@ -177,13 +185,7 @@
     grid-column: 1 / -1;
 }
 
-.detail-item strong {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    color: #333;
-}
+
 
 .lightbox {
     position: fixed;
@@ -235,7 +237,7 @@
 
 .page-header{
     text-align:center;
-    border-bottom:2px solid #e5e7eb;
+    border-bottom:1px solid rgba(124,203,255,.18);
     padding-bottom:20px;
     margin-bottom:30px;
 }
@@ -247,7 +249,7 @@
 }
 
 .subtitle{
-    color:#6b7280;
+    color:#9fb3c8;
     font-size:16px;
 }
 

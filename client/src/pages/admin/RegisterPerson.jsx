@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
-
-import "../styles/RegisterPerson.css";
+import "../../styles/RegisterPerson.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   registerPerson,
   updatePerson,
-} from "../services/personService";
+} from "../../services/personService";
 import { useParams } from "react-router-dom";
-import { getPersonById } from "../services/api";
-import useConfirmModal from "../hooks/useConfirmModal";
-import ConfirmModal from "../components/common/ConfirmModal";
+import { getPersonById } from "../../services/api";
+import useConfirmModal from "../../hooks/useConfirmModal";
+import ConfirmModal from "../../components/common/ConfirmModal";
 import {
   showSuccess,
   showError,
-} from "../utils/toast";
+} from "../../utils/toast";
 
 function RegisterPerson() {
   const { id } = useParams();
@@ -153,7 +152,7 @@ if (editingPerson) {
 
         closeConfirmModal();
 
-        navigate("/manage-persons");
+        navigate("/admin/manage-persons");
       } catch (error) {
         console.error(error);
 
@@ -180,7 +179,7 @@ if (editingPerson) {
 
         closeConfirmModal();
 
-        navigate("/manage-persons");
+       navigate("/admin/manage-persons");;
       } catch (error) {
         console.error(error);
 
@@ -219,7 +218,7 @@ return (
 
 
     <div className="form-header">
-        <h2>
+        <h2  className="page-title" >
     {editingPerson ? "Edit Missing Person" : "Register Missing Person"}
 </h2>
 

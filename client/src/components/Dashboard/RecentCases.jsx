@@ -1,7 +1,7 @@
 import "./RecentCases.css";
 import { useNavigate } from "react-router-dom";
 
-function RecentCases({ persons }) {
+function RecentCases({ persons, detailsPath }) {
   const navigate = useNavigate();
 
   return (
@@ -13,7 +13,7 @@ function RecentCases({ persons }) {
           <div
             key={person._id}
             className="recent-card"
-            onClick={() => navigate(`/person/${person._id}`)}
+            onClick={() => navigate(`${detailsPath}/${person._id}`)}
           >
             <img
               src={

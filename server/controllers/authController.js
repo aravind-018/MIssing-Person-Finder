@@ -4,18 +4,17 @@ import generateToken from "../utils/generateToken.js";
 
 export const registerUser = async (req, res) => {
   try {
-      const {
-      name,
-      email,
-      password,
-      department,
-      badgeNumber,
-      station,
-      designation,
-      district,
-      phone,
-    } = req.body;
-
+      let {
+  name,
+  email,
+  password,
+  department,
+  badgeNumber,
+  station,
+  designation,
+  district,
+  phone,
+} = req.body;
     // Validate required fields
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -164,10 +163,84 @@ export const loginUser = async (req, res) => {
 };
 
 export const getUserProfile = async (req, res) => {
-  res.status(200).json({
-  id: req.user._id,
-  name: req.user.name,
-  email: req.user.email,
-  role: req.user.role,
-});
+  try {
+    res.status(200).json({
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      phone: req.user.phone,
+      role: req.user.role,
+      department: req.user.department,
+      designation: req.user.designation,
+      badgeNumber: req.user.badgeNumber,
+      station: req.user.station,
+      district: req.user.district,
+      status: req.user.status,
+      createdAt: req.user.createdAt,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    // Validate input
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        message: "Please provide all required fields.",
+      });
+    }
+
+    // Get logged-in user
+    const user = await User.findById(req.user._id);
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Current password is incorrect.",
+      });
+    }
+
+    // Prevent reusing the same password
+    const isSamePassword = await bcrypt.compare(
+      newPassword,
+      user.password
+    );
+
+    if (isSamePassword) {
+      return res.status(400).json({
+        message:
+          "New password must be different from the current password.",
+      });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Password changed successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
 };

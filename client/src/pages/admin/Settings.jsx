@@ -1,6 +1,6 @@
 function Settings() {
     return (
-        <h1>Settings</h1>
+        <h2 className="page-title">Settings</h2>
     );
 }
 

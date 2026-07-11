@@ -53,9 +53,13 @@ function UserCard({
           </p>
         </div>
 
-        <span className="status pending">
-          Pending
-        </span>
+{user.status === "pending" && (
+    <span className="status-badge pending">Pending</span>
+)}
+
+{user.status === "suspended" && (
+    <span className="status-badge suspended">Suspended</span>
+)}
 
       </div>
 

@@ -33,7 +33,7 @@ router.get("/:id", protect, getPersonById);
 router.put(
   "/:id",
   protect,
-  authorize("admin"),
+  authorize("admin", "officer"),
   upload.array("images", 5),
   updatePerson
 );

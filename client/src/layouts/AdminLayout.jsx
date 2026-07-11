@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import adminMenu from "../config/adminMenu";
 import "./MainLayout.css";
 
-function MainLayout() {
+function AdminLayout() {
   return (
     <div className="main-layout">
-      <Sidebar />
+      <Sidebar menuItems={adminMenu} />
 
       <main className="page-content">
         <Outlet />
@@ -14,4 +15,4 @@ function MainLayout() {
   );
 }
 
-export default MainLayout;
+export default AdminLayout;

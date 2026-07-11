@@ -1,9 +1,15 @@
 import "./PersonTable.css";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+
+import { useLocation, useNavigate } from "react-router-dom";
 
 function PersonTable({ persons = [], onDelete }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+  const basePath = location.pathname.startsWith("/admin")
+  ? "/admin"
+  : "/officer";
 
   return (
     <div className="table-container">
@@ -48,7 +54,7 @@ function PersonTable({ persons = [], onDelete }) {
                   <div className="action-buttons">
                     <button
                       className="view-btn"
-                      onClick={() => navigate(`/person/${person._id}`)}
+                      onClick={() => navigate(`${basePath}/person/${person._id}`)}
                       title="View"
                     >
                       <FaEye />
@@ -56,19 +62,21 @@ function PersonTable({ persons = [], onDelete }) {
 
                     <button
                       className="edit-btn"
-                      onClick={() => navigate(`/person/edit/${person._id}`)}
+                      onClick={() => navigate(`${basePath}/person/edit/${person._id}`)}
                       title="Edit"
                     >
                       <FaEdit />
                     </button>
 
-                    <button
-                      className="delete-btn"
-                      onClick={() => onDelete(person._id)}
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
+                    {isAdmin && (
+  <button
+    className="delete-btn"
+    onClick={() => onDelete(person._id)}
+    title="Delete"
+  >
+    <FaTrash />
+  </button>
+)}
                   </div>
                 </td>
               </tr>

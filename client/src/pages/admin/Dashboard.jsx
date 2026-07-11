@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
-import DashboardCard from "../components/dashboard/DashboardCard";
-import { getAllPersons } from "../services/personService";
-import "../styles/Dashboard.css";
-import RecentCases from "../components/dashboard/RecentCases";
-import QuickActions from "../components/dashboard/QuickActions";
-import DashboardCharts from "../components/dashboard/DashboardCharts";  
+import DashboardCard from "../../components/dashboard/DashboardCard";
+import { getAllPersons } from "../../services/personService";
+import "../../styles/Dashboard.css";
+import RecentCases from "../../components/dashboard/RecentCases";
+import QuickActions from "../../components/dashboard/QuickActions";
+import DashboardCharts from "../../components/dashboard/DashboardCharts";
 import {
   FaClipboardList,
   FaExclamationTriangle,
   FaCheckCircle,
   FaCalendarAlt,
+  FaUserPlus,
+  FaUsers,
+  FaUserShield,
 } from "react-icons/fa";
+
 
 function Dashboard() {
   const [persons, setPersons] = useState([]);
@@ -60,9 +64,29 @@ const cards = [
     icon: <FaCalendarAlt />,
   },
 ];
+
+const quickActions = [
+  {
+    title: "Register Missing Person",
+    icon: <FaUserPlus />,
+    path: "/admin/register",
+  },
+  {
+    title: "Manage Missing Persons",
+    icon: <FaUsers />,
+    path: "/admin/manage-persons",
+  },
+  {
+    title: "Manage Users",
+    icon: <FaUserShield />,
+    path: "/admin/manage-users",
+  },
+];
   return (
   <div className="dashboard-container">
-    <h1 className="dashboard-title">Dashboard</h1>
+    <h2 className="page-title">Dashboard</h2>
+
+
 
     <div className="dashboard-grid">
       {cards.map((card) => (
@@ -77,8 +101,11 @@ const cards = [
     </div>
 
     <div className="dashboard-bottom">
-  <RecentCases persons={recentPersons} />
-  <QuickActions />
+  <RecentCases
+  persons={recentPersons}
+  detailsPath="/admin/person"
+/>
+  <QuickActions actions={quickActions} />
   <section className="analytics-section">
   <h2 className="section-title">Analytics</h2>
 

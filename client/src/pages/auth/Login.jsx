@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { loginUser } from "../services/authService";
-import "../styles/Login.css";
-import background from "../assets/login-bg.jpg";
-import FloatingParticles from "../components/FloatingParticles";
+import { loginUser } from "../../services/authService";
+import "@/styles/Login.css";
+import background from "../../assets/login-bg.jpg";
+import FloatingParticles from "../../components/FloatingParticles";
+import FormInput from "../../components/common/FormInput";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -20,9 +22,21 @@ function Login() {
       const data = await loginUser(email, password);
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+localStorage.setItem("user", JSON.stringify(data.user));
 
-      navigate("/dashboard");
+switch (data.user.role) {
+  case "admin":
+    navigate("/admin/dashboard");
+    break;
+
+  case "officer":
+    navigate("/officer/dashboard");
+    break;
+
+  default:
+    navigate("/");
+}
+
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }
@@ -47,53 +61,42 @@ function Login() {
           Missing Person Identification System
         </p>
 
-        <form onSubmit={handleLogin}>
+<form onSubmit={handleLogin}>
 
-          <div className="input-group">
-            <label>Email</label>
-
-            <div className="input-box">
-
-  <div className="input-icon">
-    <FaEnvelope />
-  </div>
-
-  <input
+  <FormInput
+    label="Email"
+    icon={<FaEnvelope />}
     type="email"
     placeholder="Enter Email"
     value={email}
     onChange={(e) => setEmail(e.target.value)}
   />
 
-</div>
-          </div>
-
-          <div className="input-group">
-            <label>Password</label>
-
-            <div className="input-box">
-
-  <div className="input-icon">
-    <FaLock />
-  </div>
-
-  <input
+  <FormInput
+    label="Password"
+    icon={<FaLock />}
     type="password"
     placeholder="Enter Password"
     value={password}
     onChange={(e) => setPassword(e.target.value)}
   />
 
+  <button className="login-btn">
+    Login
+  </button>
+
+  {error && <p className="error">{error}</p>}
+
+  <div className="register-link">
+  <p>
+    Don't have an account?{" "}
+    <Link to="/register">
+      Register as Officer
+    </Link>
+  </p>
 </div>
-          </div>
 
-          <button className="login-btn">
-            Login
-          </button>
-
-          {error && <p className="error">{error}</p>}
-
-        </form>
+</form>
 
       </div>
 
