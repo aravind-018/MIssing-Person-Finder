@@ -1,77 +1,109 @@
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaUserPlus,
   FaUsers,
+  FaUserShield,
   FaVideo,
   FaSearch,
   FaCog,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
+import "./Sidebar.css";
+
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/");
+  };
+
+  const menuItems = [
+    {
+      title: "Dashboard",
+      icon: <FaHome />,
+      path: "/dashboard",
+    },
+    {
+    title: "Register Missing Person",
+    icon: <FaUserPlus />,
+    path: "/register",
+},
+{
+    title: "Manage Missing Persons",
+    icon: <FaUsers />,
+    path: "/manage-persons",
+},
+
+{
+    title: "Register Officer",
+    icon: <FaUserShield />,
+    path: "/register-officer",
+},
+
+    {
+      title: "Manage Users",
+      icon: <FaUserShield />,
+      path: "/manage-users",
+    },
+    {
+      title: "Upload Video",
+      icon: <FaVideo />,
+      path: "/upload",
+    },
+    {
+      title: "Results",
+      icon: <FaSearch />,
+      path: "/results",
+    },
+    {
+      title: "Settings",
+      icon: <FaCog />,
+      path: "/settings",
+    },
+  ];
+
   return (
-    <div
-      style={{
-        width: "250px",
-        height: "100vh",
-        backgroundColor: "#111827",
-        color: "white",
-        padding: "20px",
-        boxSizing: "border-box",
-      }}
-    >
-      <h2 style={{ color: "#3B82F6", marginBottom: "40px" }}>
-        GodsEye
-      </h2>
+    <aside className="sidebar">
+      <div className="sidebar-top">
+        <div className="sidebar-logo">
+          <h1>GodsEye</h1>
+          <p>Missing Person Finder</p>
+        </div>
 
-      <nav
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-        }}
-      >
-        <Link to="/dashboard" style={linkStyle}>
-          <FaHome />
-          <span>Dashboard</span>
-        </Link>
+        <nav className="sidebar-nav">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.title}
+              to={item.path}
+              className={({ isActive }) =>
+                isActive
+                  ? "sidebar-link active"
+                  : "sidebar-link"
+              }
+            >
+              {item.icon}
+              <span>{item.title}</span>
+            </NavLink>
+          ))}
+        </nav>
+      </div>
 
-        <Link to="/register" style={linkStyle}>
-          <FaUserPlus />
-          <span>Register Person</span>
-        </Link>
-
-        <Link to="/manage-persons" style={linkStyle}>
-          <FaUsers />
-          <span>Manage Persons</span>
-        </Link>
-
-        <Link to="/upload" style={linkStyle}>
-          <FaVideo />
-          <span>Upload Video</span>
-        </Link>
-
-        <Link to="/results" style={linkStyle}>
-          <FaSearch />
-          <span>Results</span>
-        </Link>
-
-        <Link to="/settings" style={linkStyle}>
-          <FaCog />
-          <span>Settings</span>
-        </Link>
-      </nav>
-    </div>
+      <div className="sidebar-bottom">
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+        >
+          <FaSignOutAlt />
+          Logout
+        </button>
+      </div>
+    </aside>
   );
 }
-
-const linkStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  textDecoration: "none",
-  color: "white",
-  fontSize: "18px",
-};
 
 export default Sidebar;

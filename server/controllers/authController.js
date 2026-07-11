@@ -4,7 +4,17 @@ import generateToken from "../utils/generateToken.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+      const {
+      name,
+      email,
+      password,
+      department,
+      badgeNumber,
+      station,
+      designation,
+      district,
+      phone,
+    } = req.body;
 
     // Validate required fields
     if (!name || !email || !password) {
@@ -26,25 +36,52 @@ export const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Check if an admin already exists
+    const adminExists = await User.findOne({ role: "admin" });
+
+    let role = "officer";
+    let status = "pending";
+
+    // First registered user becomes admin
+    if (!adminExists) {
+  role = "admin";
+  status = "active";
+  department = "Headquarters";
+}
+
     // Create user
     const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-    role: role || "admin",
-    });
+  name,
+  email,
+  password: hashedPassword,
 
+  role,
+  department,
+
+  status,
+
+  badgeNumber,
+  station,
+  designation,
+  district,
+  phone,
+});
     res.status(201).json({
-      message: "User registered successfully.",
+      message:
+        role === "admin"
+          ? "Administrator account created successfully."
+          : "Registration submitted successfully. Please wait for administrator approval.",
+
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
 
     res.status(500).json({
       message: "Server Error",
@@ -81,6 +118,28 @@ export const loginUser = async (req, res) => {
       });
     }
 
+    // Check account status
+    if (user.status === "pending") {
+      return res.status(403).json({
+        message:
+          "Your account is awaiting administrator approval.",
+      });
+    }
+
+    if (user.status === "rejected") {
+      return res.status(403).json({
+        message:
+          "Your registration request has been rejected.",
+      });
+    }
+
+    if (user.status === "suspended") {
+      return res.status(403).json({
+        message:
+          "Your account has been suspended. Please contact the administrator.",
+      });
+    }
+
     // Generate JWT
     const token = generateToken(user._id);
 
@@ -92,6 +151,7 @@ export const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        status: user.status,
       },
     });
   } catch (error) {

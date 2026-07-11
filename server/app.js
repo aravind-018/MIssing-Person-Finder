@@ -5,6 +5,7 @@ import personRoutes from "./routes/personRoutes.js";
 import connectDB from "./config/db.js";
 import path from "path";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 
 
@@ -20,6 +21,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/person", personRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
     res.send("GodsEye API Running");

@@ -1,4 +1,4 @@
-import { FaUserPlus, FaUsers } from "react-icons/fa";
+import { FaUserPlus, FaUsers, FaUserShield } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./QuickActions.css";
 
@@ -7,14 +7,19 @@ function QuickActions() {
 
   const actions = [
   {
-    title: "Register Person",
+    title: "Register Missing Person",
     icon: <FaUserPlus />,
     path: "/register",
   },
   {
-    title: "Manage Persons",
+    title: "Manage Missing Persons",
     icon: <FaUsers />,
     path: "/manage-persons",
+  },
+  {
+    title: "Manage Users",
+    icon: <FaUserShield />,
+    path: "/manage-users",
   },
 ];
 

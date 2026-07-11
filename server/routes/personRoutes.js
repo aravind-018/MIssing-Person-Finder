@@ -8,30 +8,42 @@ import {
 } from "../controllers/personController.js";
 
 import upload from "../middleware/upload.js";
+import { protect } from "../middleware/authMiddleware.js";
+import authorize from "../middleware/authorize.js";
+
 
 const router = express.Router();
 
-// Register
+/// Register
 router.post(
   "/register",
+  protect,
+  authorize("admin"),
   upload.array("images", 5),
   registerPerson
 );
 
 // Get all
-router.get("/", getAllPersons);
+router.get("/", protect, getAllPersons);
 
 // Get one
-router.get("/:id", getPersonById);
+router.get("/:id", protect, getPersonById);
 
 // Update
 router.put(
   "/:id",
+  protect,
+  authorize("admin"),
   upload.array("images", 5),
   updatePerson
 );
 
 // Delete
-router.delete("/:id", deletePerson);
+router.delete(
+  "/:id",
+  protect,
+  authorize("admin"),
+  deletePerson
+);
 
 export default router;

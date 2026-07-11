@@ -1,0 +1,41 @@
+.particles {
+  position: absolute;
+  inset: 0;
+
+  overflow: hidden;
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+
+ background: rgba(255,255,255,.7);
+    box-shadow: 0 0 8px rgba(255,255,255,.8);
+  border-radius: 50%;
+
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: .8;
+  }
+
+  80% {
+    opacity: .8;
+  }
+
+  100% {
+    transform: translate(40px, -120vh);
+    opacity: 0;
+  }
+
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar";
+
 import "../styles/RegisterPerson.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -143,7 +143,7 @@ if (editingPerson) {
   console.log(images);
   return (
     <div className="page">
-      <Sidebar />
+      
 
       <div className="content">
 
