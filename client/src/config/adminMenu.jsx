@@ -5,6 +5,7 @@ import {
   FaUserShield,
   FaVideo,
   FaSearch,
+  FaHistory,
   FaCog,
 } from "react-icons/fa";
 
@@ -43,6 +44,11 @@ const adminMenu = [
     title: "Results",
     icon: <FaSearch />,
     path: "/admin/results",
+  },
+  {
+    title: "Recognition History",
+    icon: <FaHistory />,
+    path: "/admin/recognitions",
   },
   {
     title: "Settings",

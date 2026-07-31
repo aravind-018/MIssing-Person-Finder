@@ -4,6 +4,8 @@ import {
   FaUsers,
   FaUser,
   FaLock,
+  FaVideo,
+  FaHistory,
 } from "react-icons/fa";
 
 const officerMenu = [
@@ -21,6 +23,16 @@ const officerMenu = [
     title: "Manage Missing Persons",
     icon: <FaUsers />,
     path: "/officer/manage-persons",
+  },
+  {
+    title: "Upload Video",
+    icon: <FaVideo />,
+    path: "/officer/upload",
+  },
+  {
+    title: "Recognition History",
+    icon: <FaHistory />,
+    path: "/officer/recognitions",
   },
   {
     title: "My Profile",

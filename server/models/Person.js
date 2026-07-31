@@ -58,6 +58,19 @@ default:[]
       type: [Number],
       default: [],
     },
+
+    // One verified face per registration image. The legacy faceEmbedding field
+    // remains so pre-existing records can still be recognized.
+    faceEmbeddings: {
+      type: [
+        {
+          image: { type: String, required: true },
+          embedding: { type: [Number], required: true },
+        },
+      ],
+      default: [],
+      select: false,
+    },
   },
   { timestamps: true }
 );

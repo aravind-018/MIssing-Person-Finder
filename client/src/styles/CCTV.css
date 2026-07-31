@@ -1,0 +1,405 @@
+.cctv-page {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  color: #f8fafc;
+}
+
+.cctv-page-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.cctv-page-header .page-title {
+  margin-bottom: 10px;
+}
+
+.cctv-page-header p {
+  color: #94a3b8;
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.cctv-upload-card,
+.cctv-empty-state {
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: 30px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+}
+
+.recognition-history-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.recognition-history-card {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #1e293b;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+
+.recognition-history-date {
+  color: #7ccbff;
+  font-size: 0.78rem;
+}
+
+.recognition-history-card h3 {
+  margin: 8px 0 4px;
+  color: #f8fafc;
+}
+
+.recognition-history-card p,
+.recognition-history-meta span {
+  color: #94a3b8;
+  font-size: 0.86rem;
+}
+
+.recognition-history-meta {
+  display: grid;
+  gap: 6px;
+}
+
+.recognition-history-meta strong {
+  color: #e2e8f0;
+}
+
+.recognition-history-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.recognition-view-btn,
+.recognition-delete-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.recognition-view-btn {
+  background: #2563eb;
+}
+
+.recognition-delete-btn {
+  background: #b91c1c;
+}
+
+.cctv-card-heading {
+  margin-bottom: 24px;
+  color: #e2e8f0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.cctv-form {
+  display: grid;
+  gap: 18px;
+}
+
+.cctv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cctv-field label {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cctv-field input,
+.cctv-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid #475569;
+  border-radius: 9px;
+  outline: none;
+  background: #334155;
+  color: #f8fafc;
+  font: inherit;
+}
+
+.cctv-field input:focus,
+.cctv-field select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.16);
+}
+
+.cctv-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.cctv-file-control {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 80px;
+  padding: 14px 16px;
+  border: 1px dashed #60a5fa;
+  border-radius: 10px;
+  background: #26364d;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cctv-file-control:hover {
+  border-color: #93c5fd;
+  background: #30435c;
+}
+
+.cctv-file-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 9px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.cctv-file-copy {
+  min-width: 0;
+}
+
+.cctv-file-copy strong,
+.cctv-file-copy span {
+  display: block;
+}
+
+.cctv-file-copy strong {
+  overflow: hidden;
+  color: #f8fafc;
+  font-size: 0.92rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cctv-file-copy span {
+  margin-top: 4px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.cctv-submit-btn {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.98rem;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cctv-submit-btn:hover:not(:disabled) {
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.cctv-submit-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.cctv-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.cctv-stat-card {
+  padding: 20px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #1e293b;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.cctv-stat-card span {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.cctv-stat-card strong {
+  display: block;
+  margin-top: 8px;
+  color: #7ccbff;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.8rem;
+}
+
+.cctv-results-heading {
+  margin-bottom: 16px;
+  color: #e2e8f0;
+  font-size: 1.15rem;
+}
+
+.cctv-match-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.cctv-match-card {
+  overflow: hidden;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #1e293b;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+
+.cctv-match-image-wrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #334155;
+}
+
+.cctv-match-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cctv-match-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cctv-match-content {
+  padding: 18px;
+}
+
+.cctv-match-content h3 {
+  margin-bottom: 4px;
+  font-size: 1.12rem;
+}
+
+.cctv-match-content h3 a {
+  color: #e2e8f0;
+  text-decoration: none;
+}
+
+.cctv-match-content h3 a:hover {
+  color: #7ccbff;
+}
+
+.cctv-case-number {
+  margin-bottom: 16px;
+  color: #94a3b8;
+  font-size: 0.84rem;
+}
+
+.cctv-match-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cctv-match-meta div {
+  min-width: 0;
+}
+
+.cctv-match-meta .cctv-meta-wide {
+  grid-column: 1 / -1;
+}
+
+.cctv-match-meta span {
+  display: block;
+  margin-bottom: 3px;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.cctv-match-meta strong {
+  color: #f8fafc;
+  font-size: 0.88rem;
+}
+
+.cctv-match-meta .cctv-confidence {
+  color: #7ccbff;
+}
+
+.cctv-empty-state {
+  width: 100%;
+  color: #cbd5e1;
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .cctv-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cctv-match-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .recognition-history-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .cctv-upload-card,
+  .cctv-empty-state {
+    padding: 20px;
+  }
+
+  .cctv-page-header .page-title {
+    font-size: 1.75rem;
+  }
+
+  .cctv-stats-grid,
+  .cctv-match-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recognition-history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cctv-stat-card {
+    padding: 16px;
+  }
+}

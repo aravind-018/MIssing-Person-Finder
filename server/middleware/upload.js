@@ -37,4 +37,22 @@ const upload = multer({
     fileFilter,
 });
 
+const videoFileFilter = (req, file, cb) => {
+    const allowedExtensions = /mp4|avi|mov/;
+    const extension = path.extname(file.originalname).slice(1).toLowerCase();
+    const allowedMimeTypes = ["video/mp4", "video/quicktime", "video/x-msvideo", "video/avi"];
+
+    if (allowedExtensions.test(extension) && (!file.mimetype || allowedMimeTypes.includes(file.mimetype))) {
+        return cb(null, true);
+    }
+
+    cb(new Error("Only MP4, AVI, and MOV video files are allowed"));
+};
+
+export const videoUpload = multer({
+    storage,
+    fileFilter: videoFileFilter,
+    limits: { fileSize: 500 * 1024 * 1024 },
+});
+
 export default upload;
