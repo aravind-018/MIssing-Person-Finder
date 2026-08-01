@@ -34,6 +34,17 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="GodsEye Face AI", version="1.0.0", lifespan=lifespan)
+@app.get("/")
+def root():
+    return {
+        "status": "GodsEye AI Service Running"
+    }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok"
+    }
 
 
 @app.get("/health")

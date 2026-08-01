@@ -1,3 +1,8 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
 # Logs
 logs
 *.log
@@ -7,21 +12,39 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Builds
+dist/
+dist-ssr/
+build/
+out/
+release/
+
+# Environment
+.env
+ai-services/.venv/
+
+# Uploads
+server/uploads/
+ai-services/uploads/
+uploads/
+
+# Local
 *.local
 
-# Editor directories and files
+# Editor
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+<<<<<<< HEAD
 *.sw?
 server/uploads/
 ai-services/uploads/
 uploads/
+=======
+*.sw?
+>>>>>>> 2fb43f8 (Electron desktop launcher with automatic startup and splash screen)

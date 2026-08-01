@@ -1,4 +1,8 @@
-  import { BrowserRouter, Routes, Route } from "react-router-dom";
+ import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
   import Login from "./pages/auth/Login";
   import RegisterOfficer from "./pages/auth/RegisterOfficer";
@@ -26,6 +30,7 @@
   import ChangePassword from "./pages/officer/ChangePassword";
 
   function App() {
+
     return (
       <BrowserRouter>
         <Routes>
