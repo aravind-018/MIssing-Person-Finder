@@ -1,0 +1,6 @@
+.case-status-control { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.case-status-control select, .case-status-control button { min-height: 34px; padding: 7px 9px; border-radius: 7px; border: 1px solid #475569; background: #26364d; color: #f8fafc; font: inherit; }
+.case-status-control button { border: 0; background: #2563eb; cursor: pointer; font-weight: 700; } .case-status-control button:disabled { opacity: .55; cursor: not-allowed; }
+.case-status-badge { padding: 6px 11px; border-radius: 999px; font-size: .8rem; font-weight: 800; }.status-missing { background:#7f1d1d; color:#fecaca; }.status-found { background:#14532d; color:#bbf7d0; }.status-closed { background:#334155; color:#e2e8f0; }
+.status-pending { background:#78350f; color:#fde68a; box-shadow:0 5px 14px rgba(245,158,11,.18); }.case-status-badge:hover { transform:translateY(-1px); }
+.case-status-compact { justify-content: flex-start; margin: 0; }

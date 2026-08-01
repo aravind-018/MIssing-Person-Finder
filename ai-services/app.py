@@ -202,6 +202,7 @@ async def recognize_video(
         processed_frames = 0
         total_faces_detected = 0
         matches = []
+        last_seen_match = None
         frame_number = 0
 
         while True:
@@ -216,6 +217,26 @@ async def recognize_video(
                 for face_index, face in enumerate(faces):
                     person, similarity = best_match(face["embedding"], persons)
                     if person is not None and similarity >= threshold:
+                        candidate = {
+                            "personId": person["id"],
+                            "similarity": similarity,
+                            "timestamp": frame_number / video_fps,
+                            "frameNumber": frame_number,
+                            "faceIndex": face_index,
+                            "boundingBox": face["boundingBox"],
+                            "previewImageBase64": annotated_preview_base64(
+                                frame,
+                                face["boundingBox"],
+                                similarity,
+                                frame_number / video_fps,
+                                frame_number,
+                            ),
+                        }
+                        # This is deliberately independent of the top-three score list:
+                        # history must retain the latest sighting in the footage.
+                        if last_seen_match is None or candidate["timestamp"] >= last_seen_match["timestamp"]:
+                            last_seen_match = candidate
+
                         lowest_similarity = min(
                             (candidate["similarity"] for candidate in matches),
                             default=-1.0,
@@ -223,23 +244,7 @@ async def recognize_video(
                         if len(matches) >= 3 and similarity <= lowest_similarity:
                             continue
 
-                        matches.append(
-                            {
-                                "personId": person["id"],
-                                "similarity": similarity,
-                                "timestamp": frame_number / video_fps,
-                                "frameNumber": frame_number,
-                                "faceIndex": face_index,
-                                "boundingBox": face["boundingBox"],
-                                "previewImageBase64": annotated_preview_base64(
-                                    frame,
-                                    face["boundingBox"],
-                                    similarity,
-                                    frame_number / video_fps,
-                                    frame_number,
-                                ),
-                            }
-                        )
+                        matches.append(candidate)
                         matches.sort(key=lambda candidate: candidate["similarity"], reverse=True)
                         del matches[3:]
             frame_number += 1
@@ -250,6 +255,7 @@ async def recognize_video(
             "processedFrames": processed_frames,
             "totalFacesDetected": total_faces_detected,
             "matches": sorted(matches, key=lambda candidate: candidate["similarity"], reverse=True),
+            "lastSeenMatch": last_seen_match,
         }
     finally:
         if capture is not None:

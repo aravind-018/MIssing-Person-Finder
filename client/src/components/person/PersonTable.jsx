@@ -2,8 +2,9 @@ import "./PersonTable.css";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import StatusControl from "./StatusControl";
 
-function PersonTable({ persons = [], onDelete }) {
+function PersonTable({ persons = [], onDelete, onStatusUpdated }) {
   const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
@@ -23,6 +24,7 @@ function PersonTable({ persons = [], onDelete }) {
             <th>Gender</th>
             <th>Contact</th>
             <th>Address</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -49,6 +51,7 @@ function PersonTable({ persons = [], onDelete }) {
                 <td>{person.gender}</td>
                 <td>{person.contact}</td>
                 <td>{person.address}</td>
+                <td><StatusControl compact person={person} onUpdated={onStatusUpdated} /></td>
 
                 <td>
                   <div className="action-buttons">
@@ -83,7 +86,7 @@ function PersonTable({ persons = [], onDelete }) {
             ))
           ) : (
             <tr>
-              <td colSpan={7} className="no-data">
+              <td colSpan={9} className="no-data">
                 No matching person found.
               </td>
             </tr>

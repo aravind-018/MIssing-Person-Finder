@@ -1,0 +1,9 @@
+.image-preview-backdrop { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; padding: 24px; background: rgba(2, 6, 23, .9); }
+.image-preview-dialog { position: relative; display: grid; place-items: center; max-width: min(1100px, 100%); max-height: 100%; }
+.image-preview-image { display: block; max-width: 100%; max-height: calc(100vh - 48px); border: 1px solid rgba(124,203,255,.4); border-radius: 12px; box-shadow: 0 24px 60px rgba(0,0,0,.55); object-fit: contain; }
+.image-preview-close, .image-preview-nav { position: absolute; z-index: 1; border: 0; border-radius: 50%; background: rgba(15,23,42,.85); color: #fff; cursor: pointer; }
+.image-preview-close { top: 12px; right: 12px; width: 38px; height: 38px; font-size: 30px; line-height: 1; }
+.image-preview-nav { top: 50%; width: 46px; height: 46px; font-size: 38px; line-height: .8; transform: translateY(-50%); }
+.image-preview-prev { left: 12px; } .image-preview-next { right: 12px; }
+.image-preview-count { position: absolute; bottom: 12px; padding: 5px 10px; border-radius: 999px; background: rgba(15,23,42,.85); color: #e2e8f0; font-size: .8rem; }
+@media (max-width: 620px) { .image-preview-backdrop { padding: 12px; } .image-preview-nav { width: 38px; height: 38px; font-size: 31px; } }

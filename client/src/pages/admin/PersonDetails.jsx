@@ -4,6 +4,7 @@ import { getPersonById } from "../../services/api";
 import "../../styles/PersonDetails.css";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import StatusControl from "../../components/person/StatusControl";
 import {
     FaUser,
     FaBirthdayCake,
@@ -117,6 +118,8 @@ function PersonDetails() {
         ? "⚫ Closed"
         : "🔴 Missing"}
 </span>
+
+<StatusControl person={person} onUpdated={setPerson} />
 
 </div>
 

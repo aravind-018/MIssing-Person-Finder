@@ -3,6 +3,8 @@
   margin: 0 auto;
   color: #f8fafc;
 }
+.cctv-processing-overlay { position: fixed; inset: 0; z-index: 1500; display: grid; place-items: center; padding: 20px; background: rgba(2,6,23,.78); backdrop-filter: blur(8px); }
+.cctv-processing-card { width: min(100%, 460px); padding: 32px; border: 1px solid rgba(124,203,255,.35); border-radius: 18px; background: #182235; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,.45); }.cctv-processing-card h3 { margin: 14px 0; }.cctv-processing-card p { color:#94a3b8; }.cctv-spinner { width:46px; height:46px; margin:auto; border:4px solid #334155; border-top-color:#7ccbff; border-radius:50%; animation:cctv-spin .8s linear infinite; }.cctv-progress-track { height:10px; overflow:hidden; margin:18px 0 8px; border-radius:99px; background:#334155; }.cctv-progress-track span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#2563eb,#7ccbff); transition:width .55s ease; }@keyframes cctv-spin { to { transform:rotate(360deg); } }
 
 .cctv-page-header {
   margin-bottom: 24px;
@@ -70,6 +72,7 @@
 .recognition-history-meta strong {
   color: #e2e8f0;
 }
+.recognition-frame-thumb { display:flex; align-items:center; gap:9px; padding:0; border:0; background:transparent; color:#7ccbff; font:inherit; text-align:left; cursor:zoom-in; }.recognition-frame-thumb img { width:74px; height:48px; border-radius:6px; object-fit:cover; }
 
 .recognition-history-actions {
   display: flex;
@@ -289,7 +292,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  cursor: zoom-in;
 }
+.cctv-last-seen { display:flex; align-items:center; justify-content:space-between; gap:18px; max-width:540px; margin:22px auto; padding:14px; border:1px solid #334155; border-radius:12px; background:#1e293b; }.cctv-last-seen span,.cctv-last-seen strong { display:block; }.cctv-last-seen span { color:#94a3b8; font-size:.8rem; text-transform:uppercase; }.cctv-last-seen strong { margin-top:5px; color:#7ccbff; }.cctv-last-seen img { width:120px; height:72px; border-radius:7px; object-fit:cover; cursor:zoom-in; }
 
 .cctv-match-badge {
   position: absolute;

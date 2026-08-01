@@ -21,3 +21,8 @@ export const updatePerson = (id, data) =>
 
 export const deletePerson = (id) =>
     api.delete(`/person/${id}`);
+
+export const updatePersonStatus = async (id, status) => {
+    const { data } = await api.put(`/person/${id}/status`, { status });
+    return data;
+};

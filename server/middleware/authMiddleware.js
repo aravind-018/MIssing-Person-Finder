@@ -5,6 +5,8 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
+    console.log("Authorization Header:", req.headers.authorization);
+
    
 
     if (
@@ -18,7 +20,7 @@ export const protect = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("Decoded:", decoded);
+    console.log("Decoded User:", decoded);
 
 
 
@@ -33,6 +35,8 @@ export const protect = async (req, res, next) => {
 
     // Attach user to request
     req.user = user;
+
+    console.log("Authenticated User:", req.user);
 
     next();
   } catch (error) {

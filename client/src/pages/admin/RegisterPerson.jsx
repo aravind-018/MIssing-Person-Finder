@@ -183,7 +183,7 @@ if (editingPerson) {
       } catch (error) {
         console.error(error);
 
-        showError("Registration failed.");
+        showError(error.response?.data?.message || "Registration failed.");
 
         closeConfirmModal();
       }

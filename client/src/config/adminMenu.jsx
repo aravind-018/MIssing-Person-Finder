@@ -7,6 +7,7 @@ import {
   FaSearch,
   FaHistory,
   FaCog,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 const adminMenu = [
@@ -39,6 +40,11 @@ const adminMenu = [
     title: "Upload Video",
     icon: <FaVideo />,
     path: "/admin/upload",
+  },
+  {
+    title: "Found Reports",
+    icon: <FaCheckCircle />,
+    path: "/admin/found-reports",
   },
   {
     title: "Results",

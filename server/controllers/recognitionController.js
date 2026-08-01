@@ -9,13 +9,13 @@ const sessionQuery = (user, id) => RecognitionSession.findOne({
   _id: id,
   ...sessionScope(user),
 })
-  .populate("person", "name caseNumber images")
+  .populate("person", "name caseNumber images status")
   .populate("uploadedBy", "name role");
 
 export const getRecognitionSessions = async (req, res) => {
   try {
     const sessions = await RecognitionSession.find(sessionScope(req.user))
-      .populate("person", "name caseNumber images")
+      .populate("person", "name caseNumber images status")
       .populate("uploadedBy", "name role")
       .sort({ createdAt: -1 })
       .lean();
@@ -44,7 +44,7 @@ export const getRecognitionSession = async (req, res) => {
 
 const removePreviewImages = async (matches) => {
   const uploadsDirectory = path.resolve("uploads");
-  const filenames = [...new Set(matches.map(({ previewImage }) => path.basename(previewImage)).filter(Boolean))];
+  const filenames = [...new Set(matches.map(({ previewImage }) => previewImage).filter(Boolean))];
 
   await Promise.all(filenames.map(async (filename) => {
     try {
@@ -68,7 +68,7 @@ export const deleteRecognitionSession = async (req, res) => {
       return res.status(404).json({ success: false, message: "Recognition session not found." });
     }
 
-    await removePreviewImages(session.matches);
+    await removePreviewImages([...session.matches, { previewImage: session.lastSeenFrame }]);
     await session.deleteOne();
 
     res.json({ success: true, message: "Recognition session deleted successfully." });

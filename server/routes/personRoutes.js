@@ -5,6 +5,7 @@ import {
   deletePerson,
   updatePerson,
   getPersonById,
+  updatePersonStatus,
 } from "../controllers/personController.js";
 
 import upload from "../middleware/upload.js";
@@ -18,7 +19,7 @@ const router = express.Router();
 router.post(
   "/register",
   protect,
-  authorize("admin"),
+  authorize("admin", "officer"),
   upload.array("images", 5),
   registerPerson
 );
@@ -37,6 +38,8 @@ router.put(
   upload.array("images", 5),
   updatePerson
 );
+
+router.put("/:id/status", protect, updatePersonStatus);
 
 // Delete
 router.delete(

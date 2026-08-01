@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import detectionRoutes from "./routes/detectionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import recognitionRoutes from "./routes/recognitionRoutes.js";
+import foundReportRoutes from "./routes/foundReportRoutes.js";
 
 
 
@@ -28,6 +29,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/detections", detectionRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/recognitions", recognitionRoutes);
+app.use("/api/found-report", foundReportRoutes);
 
 app.get("/", (req, res) => {
     res.send("GodsEye API Running");

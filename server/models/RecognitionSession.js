@@ -34,6 +34,9 @@ const recognitionSessionSchema = new mongoose.Schema(
     totalFrames: { type: Number, required: true, default: 0 },
     processedFrames: { type: Number, required: true, default: 0 },
     totalFacesDetected: { type: Number, required: true, default: 0 },
+    // Latest above-threshold sighting in the source video.
+    lastSeenFrame: { type: String, default: "" },
+    lastSeenTimestamp: { type: Number, default: null },
     matches: { type: [matchSchema], default: [] },
   },
   { timestamps: true },

@@ -135,6 +135,7 @@ const filteredPersons = persons.filter(
     <option value="All">All Status</option>
     <option value="Missing">Missing</option>
     <option value="Found">Found</option>
+    <option value="Closed">Closed</option>
   </select>
 
   <select value={age} onChange={(e) => setAge(e.target.value)}>
@@ -171,6 +172,7 @@ const filteredPersons = persons.filter(
         persons={filteredPersons}
         onDelete={handleDelete}
         onEdit={handleEdit}
+        onStatusUpdated={(updated) => setPersons((current) => current.map((person) => person._id === updated._id ? updated : person))}
       />
 
       <ConfirmModal

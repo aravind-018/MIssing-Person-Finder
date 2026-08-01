@@ -110,10 +110,10 @@ const prepareRecognitionPersons = (persons) => persons.map((person) => ({
 
 const savePreview = async (encodedPreview, frameNumber, faceIndex) => {
   const filename = `match-${Date.now()}-${frameNumber}-${faceIndex}.jpg`;
-  const uploadsDirectory = path.resolve("uploads");
+  const uploadsDirectory = path.resolve("uploads", "recognitionFrames");
   await fs.mkdir(uploadsDirectory, { recursive: true });
   await fs.writeFile(path.join(uploadsDirectory, filename), Buffer.from(encodedPreview, "base64"));
-  return filename;
+  return `recognitionFrames/${filename}`;
 };
 
 export const detectVideo = async (req, res) => {
@@ -158,6 +158,11 @@ export const detectVideo = async (req, res) => {
       .sort((left, right) => right.similarity - left.similarity)
       .slice(0, 3);
     const matches = [];
+
+    const lastSeen = recognition.lastSeenMatch;
+    const lastSeenFrame = lastSeen
+      ? await savePreview(lastSeen.previewImageBase64, lastSeen.frameNumber, lastSeen.faceIndex)
+      : "";
 
     for (const match of topMatches) {
 
@@ -205,6 +210,8 @@ export const detectVideo = async (req, res) => {
       totalFrames: recognition.totalFrames,
       processedFrames: recognition.processedFrames,
       totalFacesDetected: recognition.totalFacesDetected,
+      lastSeenFrame,
+      lastSeenTimestamp: lastSeen?.timestamp ?? null,
       matches: matches.map((match) => ({
         previewImage: match.previewImage,
         timestamp: match.timestamp,

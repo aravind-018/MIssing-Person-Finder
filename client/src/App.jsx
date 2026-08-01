@@ -9,6 +9,7 @@
   import ManageUsers from "./pages/admin/ManageUsers";
   import PersonDetails from "./pages/admin/PersonDetails";
   import Settings from "./pages/admin/Settings";
+  import FoundReports from "./pages/admin/FoundReports";
 
   import UploadVideo from "./pages/UploadVideo";
   import Results from "./pages/Results";
@@ -73,6 +74,11 @@
                 <Route
                   path="/admin/settings"
                   element={<Settings />}
+                />
+
+                <Route
+                  path="/admin/found-reports"
+                  element={<FoundReports />}
                 />
 
                 <Route

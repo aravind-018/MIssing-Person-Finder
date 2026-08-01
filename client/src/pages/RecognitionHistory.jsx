@@ -4,13 +4,21 @@ import ConfirmModal from "../components/common/ConfirmModal";
 import useConfirmModal from "../hooks/useConfirmModal";
 import { deleteRecognitionSession, getRecognitionSessions } from "../services/recognitionService";
 import { showError, showSuccess } from "../utils/toast";
+import ImagePreviewModal from "../components/common/ImagePreviewModal";
+import StatusControl from "../components/person/StatusControl";
 import "../styles/CCTV.css";
+
+const formatTimestamp = (seconds) => {
+  const rounded = Math.floor(seconds || 0);
+  return `${String(Math.floor(rounded / 60)).padStart(2, "0")}:${String(rounded % 60).padStart(2, "0")}`;
+};
 
 function RecognitionHistory() {
   const { pathname } = useLocation();
   const basePath = pathname.startsWith("/officer") ? "/officer" : "/admin";
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [preview, setPreview] = useState(null);
   const { confirmModal, openConfirmModal, closeConfirmModal } = useConfirmModal();
 
   useEffect(() => {
@@ -44,18 +52,21 @@ function RecognitionHistory() {
     },
   });
 
+  const updatePersonStatus = (sessionId, updated) => setSessions((current) => current.map((session) => session._id === sessionId ? { ...session, person: { ...session.person, status: updated.status } } : session));
+
   return (
     <section className="cctv-page">
       <header className="cctv-page-header"><h2 className="page-title">Recognition History</h2><p>Stored CCTV analyses, newest first.</p></header>
       {loading ? <div className="cctv-empty-state">Loading recognition history...</div> : sessions.length === 0 ? <div className="cctv-empty-state">No recognition sessions have been stored yet.</div> : (
         <div className="recognition-history-grid">{sessions.map((session) => (
           <article className="recognition-history-card" key={session._id}>
-            <div><span className="recognition-history-date">{new Date(session.createdAt).toLocaleString("en-IN")}</span><h3>{session.person?.name || "Missing person"}</h3><p>{session.person?.caseNumber || "Case unavailable"}</p></div>
-            <div className="recognition-history-meta"><span>{session.videoName}</span><span>{session.cameraLocation}</span><strong>{session.matches.length} match{session.matches.length === 1 ? "" : "es"}</strong></div>
+            <div><span className="recognition-history-date">{new Date(session.createdAt).toLocaleString("en-IN")}</span><h3>{session.person?.name || "Missing person"}</h3><p>{session.person?.caseNumber || "Case unavailable"}</p>{session.person && <StatusControl compact person={session.person} onUpdated={(updated) => updatePersonStatus(session._id, updated)} />}</div>
+            <div className="recognition-history-meta"><span>{session.videoName}</span><span>{session.cameraLocation}</span><strong>{session.matches.length} match{session.matches.length === 1 ? "" : "es"}</strong>{session.matches[0] && <span>Best confidence: {(session.matches[0].confidence * 100).toFixed(1)}%</span>}{session.lastSeenTimestamp !== null && session.lastSeenTimestamp !== undefined && <span>Last seen: {formatTimestamp(session.lastSeenTimestamp)}</span>}{session.lastSeenFrame && <button className="recognition-frame-thumb" type="button" onClick={() => setPreview({ images: [session.lastSeenFrame, ...session.matches.map((match) => match.previewImage).filter(Boolean)], index: 0 })}><img src={`http://localhost:5000/uploads/${session.lastSeenFrame}`} alt="Last seen frame" /><span>Last seen frame</span></button>}</div>
             <div className="recognition-history-actions"><Link className="recognition-view-btn" to={`${basePath}/results/${session._id}`}>View</Link><button className="recognition-delete-btn" type="button" onClick={() => confirmDelete(session)}>Delete</button></div>
           </article>
         ))}</div>
       )}
+      {preview && <ImagePreviewModal images={preview.images} index={preview.index} onIndexChange={(index) => setPreview((current) => ({ ...current, index }))} onClose={() => setPreview(null)} alt="Recognition history frame" />}
       <ConfirmModal isOpen={confirmModal.isOpen} title={confirmModal.title} message={confirmModal.message} confirmText={confirmModal.confirmText} confirmClass={confirmModal.confirmClass} onCancel={closeConfirmModal} onConfirm={confirmModal.onConfirm} />
     </section>
   );

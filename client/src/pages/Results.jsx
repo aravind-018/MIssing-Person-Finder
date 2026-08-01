@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { getRecognitionSession } from "../services/recognitionService";
+import ImagePreviewModal from "../components/common/ImagePreviewModal";
+import StatusControl from "../components/person/StatusControl";
 import "../styles/CCTV.css";
 
 const formatTimestamp = (seconds) => {
@@ -14,6 +16,7 @@ function Results() {
   const personPath = pathname.startsWith("/officer") ? "/officer/person" : "/admin/person";
   const [session, setSession] = useState(null);
   const [error, setError] = useState("");
+  const [previewIndex, setPreviewIndex] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -37,16 +40,20 @@ function Results() {
     { label: "Faces Detected", value: session.totalFacesDetected },
     { label: "Matches Found", value: session.matches.length },
   ];
+  const previewImages = [session.lastSeenFrame, ...session.matches.map((match) => match.previewImage)].filter(Boolean);
+  const updateStatus = (updated) => setSession((current) => ({ ...current, person: { ...current.person, status: updated.status } }));
 
   return (
     <section className="cctv-page">
       <header className="cctv-page-header"><h2 className="page-title">CCTV Recognition Results</h2><p>{session.cameraLocation} · {session.videoName}</p></header>
       <div className="cctv-stats-grid">{statistics.map((stat) => <article className="cctv-stat-card" key={stat.label}><span>{stat.label}</span><strong>{stat.value ?? 0}</strong></article>)}</div>
+      {session.person && <StatusControl person={session.person} onUpdated={updateStatus} />}
+      {session.lastSeenFrame && <section className="cctv-last-seen"><div><span>Last seen in video</span><strong>{formatTimestamp(session.lastSeenTimestamp)}</strong></div><img role="button" tabIndex="0" onClick={() => setPreviewIndex(0)} onKeyDown={(event) => event.key === "Enter" && setPreviewIndex(0)} src={`http://localhost:5000/uploads/${session.lastSeenFrame}`} alt="Last seen frame" /></section>}
       <h3 className="cctv-results-heading">Top 3 Matches</h3>
       {session.matches.length === 0 ? <div className="cctv-empty-state">No face match met the configured similarity threshold.</div> : (
         <div className="cctv-match-grid">{session.matches.map((match, index) => (
           <article className="cctv-match-card" key={`${match.previewImage}-${index}`}>
-            <div className="cctv-match-image-wrap"><img src={`http://localhost:5000/uploads/${match.previewImage}`} alt={`Annotated CCTV match for ${session.person?.name || "selected person"}`} /><span className="cctv-match-badge">Match</span></div>
+            <div className="cctv-match-image-wrap"><img onClick={() => setPreviewIndex(previewImages.indexOf(match.previewImage))} src={`http://localhost:5000/uploads/${match.previewImage}`} alt={`Annotated CCTV match for ${session.person?.name || "selected person"}`} /><span className="cctv-match-badge">Match</span></div>
             <div className="cctv-match-content">
               <h3>{session.person ? <Link to={`${personPath}/${session.person._id}`}>{session.person.name}</Link> : "Missing person"}</h3>
               <p className="cctv-case-number">Case No. {session.person?.caseNumber || "N/A"}</p>
@@ -60,6 +67,7 @@ function Results() {
           </article>
         ))}</div>
       )}
+      {previewIndex !== null && <ImagePreviewModal images={previewImages} index={previewIndex} onIndexChange={setPreviewIndex} onClose={() => setPreviewIndex(null)} alt="CCTV recognition frame" />}
     </section>
   );
 }

@@ -10,17 +10,44 @@ export const checkAI = async () => {
 };
 
 export const extractFaces = async (imagePaths) => {
-  const form = new FormData();
-  imagePaths.forEach((imagePath) => {
-    form.append("images", fs.createReadStream(imagePath));
-  });
+  try {
+    const form = new FormData();
 
-  const { data } = await axios.post(`${AI_URL}/embeddings`, form, {
-    headers: form.getHeaders(),
-    timeout: 60000,
-  });
+    imagePaths.forEach((imagePath) => {
+      form.append("images", fs.createReadStream(imagePath));
+    });
 
-  return data.images;
+    const endpoint = `${AI_URL}/embeddings`;
+    console.log("AI endpoint:", endpoint);
+    console.log("AI image paths:", imagePaths);
+
+    const { data } = await axios.post(endpoint, form, {
+      headers: form.getHeaders(),
+      timeout: 60000,
+    });
+
+    console.log("AI Response:", data);
+
+    if (!Array.isArray(data?.images)) {
+      const error = new Error("AI service returned an invalid response: expected an images array.");
+      error.statusCode = 502;
+      throw error;
+    }
+
+    return data.images;
+  } catch (error) {
+    console.error("========== ERROR ==========");
+    console.error(error);
+
+    if (error.response) {
+      console.error("Status:", error.response.status);
+      console.error("Response:", error.response.data);
+    }
+
+    console.error(error.stack);
+
+    throw error;
+  }
 };
 
 export const recognizeVideo = async (videoPath, persons, frameInterval) => {
