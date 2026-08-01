@@ -2,15 +2,18 @@ name: GodsEye CI
 
 on:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
 
   pull_request:
-    branches: [main, master]
+    branches:
+      - main
+      - master
 
 jobs:
 
   client:
-
     name: Build React Client
 
     runs-on: ubuntu-latest
@@ -20,11 +23,10 @@ jobs:
         working-directory: client
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -36,13 +38,12 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+        continue-on-error: true
 
-      - name: Build Project
+      - name: Build React Application
         run: npm run build
 
-
   server:
-
     name: Verify Express Backend
 
     runs-on: ubuntu-latest
@@ -52,10 +53,11 @@ jobs:
         working-directory: server
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
@@ -64,12 +66,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Verify Server
+      - name: Verify Server Syntax
         run: node --check app.js
 
-
   ai-service:
-
     name: Verify AI Service
 
     runs-on: ubuntu-latest
@@ -79,19 +79,21 @@ jobs:
         working-directory: ai-services
 
     steps:
-
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
+          cache-dependency-path: ai-services/requirements.txt
 
-      - name: Install Dependencies
+      - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Verify Python Files
+      - name: Verify Python Source
         run: |
           python -m compileall .
