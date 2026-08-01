@@ -43,6 +43,12 @@ jobs:
       - name: Build React Application
         run: npm run build
 
+      - name: Upload React Build
+  uses: actions/upload-artifact@v4
+  with:
+    name: react-build
+    path: client/dist
+
   server:
     name: Verify Express Backend
 
@@ -65,6 +71,10 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Security Audit
+  run: npm audit --audit-level=high
+  continue-on-error: true
 
       - name: Verify Server Syntax
         run: node --check app.js
@@ -93,6 +103,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Security Audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
 
       - name: Verify Python Source
         run: |
