@@ -8,9 +8,9 @@ import {
   FaUsers,
 } from "react-icons/fa";
 
-import DashboardCard from "../../components/dashboard/DashboardCard";
-import QuickActions from "../../components/dashboard/QuickActions";
-import RecentCases from "../../components/dashboard/RecentCases";
+import DashboardCard from "../../components/Dashboard/DashboardCard";
+import QuickActions from "../../components/Dashboard/QuickActions";
+import RecentCases from "../../components/Dashboard/RecentCases";
 import { getAllPersons } from "../../services/personService";
 
 import "../../styles/Dashboard.css";
