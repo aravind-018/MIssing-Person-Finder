@@ -17,11 +17,19 @@ import {
     FaStickyNote,
     FaClock,
 } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
+
 
 function PersonDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [selectedImage, setSelectedImage] = useState("");
+    const location = useLocation();
+
+    const basePath = location.pathname.startsWith("/admin")
+    ? "/admin"
+    : "/officer";
+
     const [showLightbox, setShowLightbox] = useState(false);
     const [person, setPerson] = useState(null);
 
@@ -202,7 +210,7 @@ function PersonDetails() {
 
 <button
     className="details-edit-btn"
-    onClick={() => navigate(`/admin/person/edit/${person._id}`)}
+    onClick={() => navigate(`${basePath}/person/edit/${person._id}`)}
 >
     ✏ Edit
 </button>

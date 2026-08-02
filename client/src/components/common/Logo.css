@@ -1,0 +1,25 @@
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.logo-image{
+    object-fit:contain;
+    flex-shrink:0;
+}
+
+.logo-text h2{
+    margin:0;
+    color:#4db8ff;
+    font-size:34px;
+    font-weight:700;
+    line-height:1;
+}
+
+.logo-text span{
+    display:block;
+    margin-top:5px;
+    color:#9ca7bf;
+    font-size:13px;
+}

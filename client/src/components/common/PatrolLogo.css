@@ -1,0 +1,164 @@
+/* ============================================================================
+   PatrolLogo.css — Autonomous "GodsEye" surveillance drone
+   ============================================================================
+   All positioning/motion is driven from PatrolLogo.jsx via Framer Motion
+   values (x, y, rotate, width, opacity, top/left/width/height, borderRadius).
+   This file only defines the static look: sizing, color, blur, gradients,
+   blend modes, stacking.
+
+   STACKING NOTE
+   -------------
+   Your .login-card has z-index: 5 (Login.css). This layer defaults to
+   z-index: 6 so the scan-line/wash reads clearly ON TOP of the glass card
+   during a scan (like a HUD sweep), while the drone itself simply never
+   overlaps the card thanks to the steering/avoidance logic in the JS —
+   z-order between the drone and the card is a non-issue in practice.
+   Override with --ge-patrol-z on a wrapper if your stacking differs.
+   ========================================================================= */
+
+.ge-patrol-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ge-patrol-z, 6);
+  pointer-events: none; /* never intercepts clicks — the form stays fully usable */
+  overflow: visible;
+}
+
+/* ----------------------------------------------------------------------
+   Drone (your GodsEye logo.png)
+   ---------------------------------------------------------------------- */
+
+.ge-drone {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--ge-drone-size, 180px);
+  height: var(--ge-drone-size, 180px);
+  margin-left: calc(var(--ge-drone-size, 180px) / -2);
+  margin-top: calc(var(--ge-drone-size, 180px) / -2);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+  /* Per spec: no shadow, no glow, no floating effect — motion alone reads as the drone */
+  filter: none;
+  box-shadow: none;
+}
+
+.ge-drone-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: none;
+  box-shadow: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ----------------------------------------------------------------------
+   Searchlight — soft volumetric cone, on only during SCAN
+   ---------------------------------------------------------------------- */
+
+.ge-searchlight {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: var(--ge-beam-height, 170px);
+  margin-top: calc(var(--ge-beam-height, 170px) / -2);
+  transform-origin: 0% 50%;
+  pointer-events: none;
+  will-change: transform, opacity, width;
+
+  /* Narrow at the drone (origin), wide at the far end — a soft cone, not a hard triangle */
+  clip-path: polygon(0% 42%, 100% 0%, 100% 100%, 0% 58%);
+
+  background: linear-gradient(
+    to right,
+    rgba(59, 130, 246, 0.42) 0%,
+    rgba(59, 130, 246, 0.18) 55%,
+    rgba(59, 130, 246, 0) 100%
+  );
+
+  filter: blur(18px);
+  mix-blend-mode: screen; /* stays subtle against the dark background, never a flat blue wash */
+}
+
+/* Soft pool of light where the beam meets its target */
+.ge-searchlight::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 90px;
+  height: 90px;
+  transform: translate(0, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.32), rgba(59, 130, 246, 0) 70%);
+  filter: blur(8px);
+}
+
+/* ----------------------------------------------------------------------
+   Card scan overlay — horizontal scanning line + faint wash over the card
+   (border-radius is set inline from PatrolLogo.jsx to match the card's
+   actual computed radius, so it clips perfectly to your 28px card)
+   ---------------------------------------------------------------------- */
+
+.ge-scan-overlay {
+  position: fixed;
+  pointer-events: none;
+  overflow: hidden;
+  background: rgba(59, 130, 246, 0.035);
+  will-change: opacity, top, left, width, height;
+}
+
+.ge-scan-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(96, 165, 250, 0) 0%,
+    rgba(96, 165, 250, 0.9) 15%,
+    rgba(191, 219, 254, 1) 50%,
+    rgba(96, 165, 250, 0.9) 85%,
+    rgba(96, 165, 250, 0) 100%
+  );
+  box-shadow:
+    0 0 10px 2px rgba(59, 130, 246, 0.55),
+    0 0 24px 6px rgba(59, 130, 246, 0.25);
+  will-change: top;
+}
+
+/* Trailing glow left behind as the line sweeps downward */
+.ge-scan-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 130px;
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0) 0%, rgba(59, 130, 246, 0.16) 100%);
+}
+
+/* Faint reflection just ahead of the line */
+.ge-scan-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 100%);
+}
+
+/* ----------------------------------------------------------------------
+   Accessibility — respect reduced motion
+   ---------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ge-searchlight,
+  .ge-scan-overlay {
+    display: none;
+  }
+}
