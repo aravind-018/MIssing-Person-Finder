@@ -10,6 +10,9 @@ import detectionRoutes from "./routes/detectionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import recognitionRoutes from "./routes/recognitionRoutes.js";
 import foundReportRoutes from "./routes/foundReportRoutes.js";
+import settingsRoutes from "./routes/settingsRoutes.js";
+
+console.log("=== APP STARTED ===");
 
 
 
@@ -30,6 +33,7 @@ app.use("/api/detections", detectionRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/recognitions", recognitionRoutes);
 app.use("/api/found-report", foundReportRoutes);
+app.use("/api/settings", settingsRoutes);
 
 app.get("/", (req, res) => {
     res.send("GodsEye API Running");
@@ -46,4 +50,3 @@ app.get("/health", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-

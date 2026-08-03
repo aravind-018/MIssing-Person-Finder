@@ -1,0 +1,33 @@
+.setting-section {
+  margin-bottom: 28px;
+}
+
+.setting-section:last-child {
+  margin-bottom: 0;
+}
+
+.setting-section-header {
+  margin-bottom: 10px;
+}
+
+.setting-section-header h3 {
+  color: #7dd3fc;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.setting-section-header p {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 6px 0 0 0;
+}
+
+.setting-section-body {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+
+  padding: 6px 18px;
+}

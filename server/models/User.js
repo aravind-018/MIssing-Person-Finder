@@ -88,6 +88,17 @@ department: {
       type: Date,
       default: null,
     },
+
+    preferences: {
+      emailAlerts: {
+        type: Boolean,
+        default: true,
+      },
+      matchAlerts: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   {
     timestamps: true,

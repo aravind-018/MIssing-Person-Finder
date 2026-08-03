@@ -1,0 +1,74 @@
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.setting-field:last-child {
+  border-bottom: none;
+}
+
+.setting-field-label {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.setting-field-description {
+  color: #94a3b8;
+  font-size: 0.83rem;
+  margin: 0 0 4px 0;
+}
+
+.setting-field-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  max-width: 420px;
+}
+
+.setting-field-control input,
+.setting-field-control select {
+  flex: 1;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+
+  padding: 11px 14px;
+
+  color: white;
+  font-size: 0.95rem;
+
+  outline: none;
+
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.setting-field-control input:focus,
+.setting-field-control select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.setting-field-control input:disabled,
+.setting-field-control select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.setting-field-control select option {
+  background: #0f172a;
+  color: white;
+}
+
+.setting-field-suffix {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}

@@ -3,10 +3,12 @@ import Person from "../models/Person.js";
 import RecognitionSession from "../models/RecognitionSession.js";
 import mongoose from "mongoose";
 import { checkAI, extractFaces, recognizeVideo } from "../services/aiService.js";
+import { getSystemSettings } from "../services/settingsService.js";
 import fs from "fs/promises";
 import path from "path";
 
-const threshold = Number(process.env.FACE_MATCH_THRESHOLD || 0.45);
+// Fallback used only if the settings document is unreachable for some reason.
+const ENV_DEFAULT_THRESHOLD = Number(process.env.FACE_MATCH_THRESHOLD || 0.45);
 
 const cosineSimilarity = (left, right) => {
   if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) {
@@ -52,6 +54,15 @@ export const detect = async (req, res) => {
     if (!req.body.location?.trim()) {
       return res.status(400).json({ success: false, message: "Location is required." });
     }
+
+    let threshold = ENV_DEFAULT_THRESHOLD;
+    try {
+      const settings = await getSystemSettings();
+      threshold = settings.ai.faceMatchThreshold;
+    } catch (_settingsError) {
+      // Settings document unreachable — fall back to the env-configured default.
+    }
+
     const [analysis] = await extractFaces([req.file.path]);
     const persons = await Person.find({ status: "Missing" }).select("+faceEmbeddings");
     const results = [];
@@ -131,7 +142,16 @@ export const detectVideo = async (req, res) => {
       return res.status(400).json({ success: false, message: "Selected person ID is invalid." });
     }
 
+    let settingsDefaultFrameInterval = null;
+    try {
+      const settings = await getSystemSettings();
+      settingsDefaultFrameInterval = settings.ai.defaultFrameInterval;
+    } catch (_settingsError) {
+      // Settings document unreachable — fall back further down the chain.
+    }
+
     const frameInterval = Number.parseInt(req.body.frameInterval, 10)
+      || settingsDefaultFrameInterval
       || Number.parseInt(process.env.VIDEO_FRAME_INTERVAL, 10)
       || 5;
     if (frameInterval < 1 || frameInterval > 300) {

@@ -40,24 +40,19 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    await registerOfficer({
+    const response = await registerOfficer({
   ...formData,
   role: "officer",
   status: "pending",
 });
 
-if (isAdmin) {
-  showSuccess("Officer registered successfully.");
+showSuccess(response.message);
 
+if (isAdmin) {
   navigate("/admin/manage-users");
 } else {
-  showSuccess(
-  "Registration submitted successfully. Please wait for administrator approval."
-);
-
   navigate("/");
 }
-
   } catch (error) {
     showError(
   error.response?.data?.message ||

@@ -43,13 +43,10 @@ def root():
 @app.get("/health")
 def health():
     return {
-        "status": "ok"
+        "success": True,
+        "service": "GodsEye Face AI",
+        "ready": face_app is not None,
     }
-
-
-@app.get("/health")
-def health():
-    return {"success": True, "service": "GodsEye Face AI", "ready": face_app is not None}
 
 
 def decode_image(payload: bytes) -> np.ndarray:

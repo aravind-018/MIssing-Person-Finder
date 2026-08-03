@@ -12,7 +12,7 @@
   import ManagePersons from "./pages/admin/ManagePersons";
   import ManageUsers from "./pages/admin/ManageUsers";
   import PersonDetails from "./pages/admin/PersonDetails";
-  import Settings from "./pages/admin/Settings";
+  
   import FoundReports from "./pages/admin/FoundReports";
 
   import UploadVideo from "./pages/UploadVideo";
@@ -28,6 +28,18 @@
   import OfficerDashboard from "./pages/officer/OfficerDashboard";
   import OfficerProfile from "./pages/officer/OfficerProfile";
   import ChangePassword from "./pages/officer/ChangePassword";
+
+  //settings
+import Settings from "./pages/admin/settings/Settings";
+import GeneralSettings from "./pages/admin/settings/GeneralSettings";
+import AISettings from "./pages/admin/settings/AISettings";
+import CameraSettings from "./pages/admin/settings/CameraSettings";
+import NotificationSettings from "./pages/admin/settings/NotificationSettings";
+import SecuritySettings from "./pages/admin/settings/SecuritySettings";
+import BackupSettings from "./pages/admin/settings/BackupSettings";
+import SystemInfo from "./pages/admin/settings/SystemInfo";
+import ActivityLogs from "./pages/admin/settings/ActivityLogs";
+
 
   function App() {
 
@@ -76,10 +88,17 @@
                 <Route path="/admin/results/:id" element={<Results />} />
                 <Route path="/admin/recognitions" element={<RecognitionHistory />} />
 
-                <Route
-                  path="/admin/settings"
-                  element={<Settings />}
-                />
+                <Route path="/admin/settings" element={<Settings />}>
+  <Route index element={<GeneralSettings />} />
+  <Route path="general" element={<GeneralSettings />} />
+  <Route path="ai" element={<AISettings />} />
+  <Route path="camera" element={<CameraSettings />} />
+  <Route path="notifications" element={<NotificationSettings />} />
+  <Route path="security" element={<SecuritySettings />} />
+  <Route path="backup" element={<BackupSettings />} />
+  <Route path="system-info" element={<SystemInfo />} />
+  <Route path="activity-logs" element={<ActivityLogs />} />
+</Route>
 
                 <Route
                   path="/admin/found-reports"

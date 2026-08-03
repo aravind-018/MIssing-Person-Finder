@@ -54,3 +54,19 @@ export const changePassword = async (passwordData) => {
 
   return response.data;
 };
+
+export const updatePreferences = async (preferences) => {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.put(
+    `${API_URL}/preferences`,
+    preferences,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};

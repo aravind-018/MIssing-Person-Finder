@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
+import { getSystemSettings } from "../services/settingsService.js";
+import { validatePassword } from "../utils/passwordValidator.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -16,12 +18,23 @@ export const registerUser = async (req, res) => {
   phone,
 } = req.body;
     // Validate required fields
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        message: "Please provide all required fields.",
-      });
-    }
+if (!name || !email || !password) {
+  return res.status(400).json({
+    message: "Please provide all required fields.",
+  });
+}
 
+
+
+const passwordValidation = await validatePassword(password);
+
+
+
+if (!passwordValidation.valid) {
+  return res.status(400).json({
+    message: passwordValidation.message,
+  });
+}
     // Check if email already exists
     const existingUser = await User.findOne({ email });
 
@@ -35,14 +48,19 @@ export const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Check if an admin already exists
-    const adminExists = await User.findOne({ role: "admin" });
+// Check if an admin already exists
+const adminExists = await User.findOne({ role: "admin" });
 
-    let role = "officer";
-    let status = "pending";
+const settings = await getSystemSettings();
 
-    // First registered user becomes admin
-    if (!adminExists) {
+
+let role = "officer";
+let status = settings.security.autoApproveOfficers
+  ? "active"
+  : "pending";
+
+// First registered user becomes admin
+if (!adminExists) {
   role = "admin";
   status = "active";
   department = "Headquarters";
@@ -65,20 +83,23 @@ export const registerUser = async (req, res) => {
   district,
   phone,
 });
-    res.status(201).json({
-      message:
-        role === "admin"
-          ? "Administrator account created successfully."
-          : "Registration submitted successfully. Please wait for administrator approval.",
+    const registrationMessage =
+  role === "admin"
+    ? "Administrator account created successfully."
+    : status === "active"
+    ? "Officer account created successfully."
+    : "Registration submitted successfully. Please wait for administrator approval.";
 
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-      },
-    });
+res.status(201).json({
+  message: registrationMessage,
+  user: {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    status: user.status,
+  },
+});
   } catch (error) {
     console.error(error);
 
@@ -176,7 +197,43 @@ export const getUserProfile = async (req, res) => {
       station: req.user.station,
       district: req.user.district,
       status: req.user.status,
+      preferences: req.user.preferences,
       createdAt: req.user.createdAt,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+export const updatePreferences = async (req, res) => {
+  try {
+    const { emailAlerts, matchAlerts } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    if (typeof emailAlerts === "boolean") {
+      user.preferences.emailAlerts = emailAlerts;
+    }
+
+    if (typeof matchAlerts === "boolean") {
+      user.preferences.matchAlerts = matchAlerts;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Preferences updated successfully.",
+      preferences: user.preferences,
     });
   } catch (error) {
     console.error(error);
@@ -210,6 +267,14 @@ export const changePassword = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({
         message: "Current password is incorrect.",
+      });
+    }
+
+    const passwordValidation = await validatePassword(newPassword);
+
+    if (!passwordValidation.valid) {
+      return res.status(400).json({
+        message: passwordValidation.message,
       });
     }
 

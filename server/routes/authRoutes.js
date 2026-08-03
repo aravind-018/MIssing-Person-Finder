@@ -4,6 +4,7 @@ import {
   loginUser,
   getUserProfile,
   changePassword,
+  updatePreferences,
 } from "../controllers/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -16,6 +17,11 @@ router.put(
   "/change-password",
   protect,
   changePassword
+);
+router.put(
+  "/preferences",
+  protect,
+  updatePreferences
 );
 
 export default router;

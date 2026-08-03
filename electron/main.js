@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const { spawn } = require("child_process");
+const fs = require("fs");
 const waitOn = require("wait-on");
 const path = require("path");
 
@@ -72,11 +73,14 @@ backendProcess.on("error", (err) => {
 
     console.log("Starting AI...");
 
+    const defaultPython = path.join(__dirname, "../ai-services/.venv/Scripts/python.exe");
+    const pythonExecutable = fs.existsSync(defaultPython) ? defaultPython : "python";
+    if (pythonExecutable === "python") {
+        console.warn("AI service virtual environment not found; falling back to system python. Ensure the correct interpreter is available.");
+    }
+
     aiProcess = spawn(
-        path.join(
-            __dirname,
-            "../ai-services/.venv/Scripts/python.exe"
-        ),
+        pythonExecutable,
         [
             "-m",
             "uvicorn",
