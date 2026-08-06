@@ -1,8 +1,8 @@
 const isDev = process.env.NODE_ENV !== "production";
 
 const logger = {
-  info: (...args) => { if (isDev) console.info(...args); },
-  warn: (...args) => { if (isDev) console.warn(...args); },
+  info: (...args) => { console.info(...args); },
+  warn: (...args) => { console.warn(...args); },
   error: (...args) => { console.error(...args); },
   debug: (...args) => { if (isDev) console.debug(...args); },
 };

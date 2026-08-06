@@ -1,0 +1,66 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: godseye-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - godseye-network
+
+  ai-service:
+    build:
+      context: ./ai-services
+      dockerfile: Dockerfile
+    container_name: godseye-ai-service
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads-data:/app/uploads
+    networks:
+      - godseye-network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: godseye-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/godseye
+      - AI_SERVICE_URL=http://ai-service:8000
+      - JWT_SECRET=GodsEyeSuperSecretKey
+    depends_on:
+      - mongo
+      - ai-service
+    volumes:
+      - uploads-data:/app/uploads
+    networks:
+      - godseye-network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: godseye-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - godseye-network
+
+volumes:
+  mongo-data:
+  uploads-data:
+
+networks:
+  godseye-network:
+    driver: bridge

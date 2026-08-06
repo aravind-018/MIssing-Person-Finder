@@ -1,0 +1,12 @@
+node_modules
+.venv
+__pycache__
+.git
+.github
+release
+dist
+build
+*.log
+.DS_Store
+uploads/*
+!uploads/.gitkeep

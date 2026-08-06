@@ -96,7 +96,7 @@ res.status(201).json({
   },
 });
   } catch (error) {
-    // Error handled and returned to client without revealing internal details
+    logger.error("registerUser error:", error);
     res.status(500).json({
       message: "Server Error",
     });

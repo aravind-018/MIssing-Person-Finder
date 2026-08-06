@@ -30,6 +30,7 @@ role: {
 department: {
   type: String,
   enum: [
+    "Headquarters",
     "Police",
     "Crime Branch",
     "CBI",

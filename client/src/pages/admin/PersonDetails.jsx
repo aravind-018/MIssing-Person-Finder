@@ -70,7 +70,7 @@ function PersonDetails() {
 
     <div className="main-image-container">
 <img
-    src={`http://localhost:5000/uploads/${selectedImage}`}
+    src={`/uploads/${selectedImage}`}
     alt={person.name}
     className="main-image"
     onClick={() => setShowLightbox(true)}
@@ -81,7 +81,7 @@ function PersonDetails() {
         {person.images.map((image, index) => (
             <img
                 key={index}
-                src={`http://localhost:5000/uploads/${image}`}
+                src={`/uploads/${image}`}
                 alt={`Thumbnail ${index + 1}`}
                 className={`thumbnail ${
                     selectedImage === image ? "active-thumbnail" : ""
@@ -118,14 +118,6 @@ function PersonDetails() {
         <h4>Gender</h4>
         <p>{person.gender}</p>
     </div>
-
-<span className="status-badge">
-    {person.status === "Found"
-        ? "🟢 Found"
-        : person.status === "Closed"
-        ? "⚫ Closed"
-        : "🔴 Missing"}
-</span>
 
 <StatusControl person={person} onUpdated={setPerson} />
 
@@ -226,7 +218,7 @@ function PersonDetails() {
         <span className="close-btn">&times;</span>
 
         <img
-            src={`http://localhost:5000/uploads/${selectedImage}`}
+            src={`/uploads/${selectedImage}`}
             alt={person.name}
             className="lightbox-image"
             onClick={(e) => e.stopPropagation()}

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import DashboardCard from "../../components/Dashboard/DashboardCard";
+import DashboardCard from "../../components/dashboard/DashboardCard";
 import { getAllPersons } from "../../services/personService";
 import "../../styles/Dashboard.css";
-import RecentCases from "../../components/Dashboard/RecentCases";
-import QuickActions from "../../components/Dashboard/QuickActions";
-import DashboardCharts from "../../components/Dashboard/DashboardCharts";
+import RecentCases from "../../components/dashboard/RecentCases";
+import QuickActions from "../../components/dashboard/QuickActions";
+import DashboardCharts from "../../components/dashboard/DashboardCharts";
 import {
   FaClipboardList,
   FaExclamationTriangle,

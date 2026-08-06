@@ -37,7 +37,7 @@ function PersonTable({ persons = [], onDelete, onStatusUpdated }) {
                 <td className="photo-cell">
                   {person.images?.length ? (
                     <img
-                      src={`http://localhost:5000/uploads/${person.images[0]}`}
+                      src={`/uploads/${person.images[0]}`}
                       alt={person.name}
                       className="person-photo"
                     />

@@ -17,27 +17,49 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from insightface.app import FaceAnalysis
 
 
+import threading
+
 face_app: FaceAnalysis | None = None
+is_loading: bool = False
+model_status: str = "not_started"
+
+
+def load_face_model():
+    global face_app, is_loading, model_status
+    is_loading = True
+    model_status = "downloading_and_initializing"
+    print("Starting InsightFace (buffalo_l) background model loading...")
+    try:
+        app_instance = FaceAnalysis(
+            name="buffalo_l",
+            providers=["CPUExecutionProvider"],
+        )
+        app_instance.prepare(ctx_id=0, det_size=(640, 640))
+        face_app = app_instance
+        model_status = "ready"
+        print("InsightFace model (buffalo_l) loaded successfully and is ready.")
+    except Exception as e:
+        model_status = f"error: {e}"
+        print(f"Error loading InsightFace model: {e}")
+    finally:
+        is_loading = False
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    global face_app
-    # buffalo_l includes face detection, alignment, and recognition models.
-    face_app = FaceAnalysis(
-        name="buffalo_l",
-        providers=["CPUExecutionProvider"],
-    )
-    face_app.prepare(ctx_id=0, det_size=(640, 640))
+    thread = threading.Thread(target=load_face_model, daemon=True)
+    thread.start()
     yield
-    face_app = None
 
 
 app = FastAPI(title="GodsEye Face AI", version="1.0.0", lifespan=lifespan)
+
 @app.get("/")
 def root():
     return {
-        "status": "GodsEye AI Service Running"
+        "status": "GodsEye AI Service Running",
+        "ready": face_app is not None,
+        "modelStatus": model_status,
     }
 
 @app.get("/health")
@@ -46,6 +68,7 @@ def health():
         "success": True,
         "service": "GodsEye Face AI",
         "ready": face_app is not None,
+        "modelStatus": model_status,
     }
 
 

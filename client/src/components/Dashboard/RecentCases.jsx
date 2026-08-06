@@ -18,7 +18,7 @@ function RecentCases({ persons, detailsPath }) {
             <img
               src={
                 person.images?.length
-                  ? `http://localhost:5000/uploads/${person.images[0]}`
+                  ? `/uploads/${person.images[0]}`
                   : "/placeholder.png"
               }
               alt={person.name}

@@ -115,6 +115,7 @@ async function startApp() {
             alwaysOnTop: true,
             autoHideMenuBar: true,
             backgroundColor: "#020617",
+            icon: path.join(__dirname, "icon.png"),
         });
 
         splash.loadFile(path.join(__dirname, "splash.html"));
@@ -138,6 +139,7 @@ async function startApp() {
             autoHideMenuBar: true,
             title: "GodsEye",
             backgroundColor: "#0f172a",
+            icon: path.join(__dirname, "icon.png"),
             webPreferences: {
                 preload: path.join(__dirname, "preload.js"),
                 contextIsolation: true,
