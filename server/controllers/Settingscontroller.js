@@ -27,6 +27,30 @@ export const getSettings = async (req, res) => {
 };
 
 /*
+    GET PUBLIC BRANDING
+    Public endpoint for Login card and unauthenticated views.
+*/
+export const getBranding = async (req, res) => {
+  try {
+    const settings = await getSystemSettings();
+    const general = settings.general || {};
+
+    res.status(200).json({
+      systemName: general.systemName || "GodsEye",
+      applicationTagline: general.applicationTagline || "Missing Person Identification System",
+      organizationName: general.organizationName || "",
+      departmentName: general.departmentName || "",
+      supportEmail: general.supportEmail || "",
+    });
+  } catch (error) {
+    logger.error("getBranding error:", error);
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+/*
     UPDATE A SETTINGS SECTION
     (general / ai / camera / notifications / security / backup)
 */
@@ -97,12 +121,25 @@ export const getSystemInfo = async (req, res) => {
       RecognitionSession.countDocuments(),
     ]);
 
+    let storageUsage = "Normal";
+    try {
+      if (mongoose.connection.readyState === 1 && mongoose.connection.db) {
+        const stats = await mongoose.connection.db.stats();
+        const dataSizeMB = (stats.dataSize / (1024 * 1024)).toFixed(2);
+        storageUsage = `${dataSizeMB} MB`;
+      }
+    } catch (_e) {
+      storageUsage = "Normal";
+    }
+
     res.status(200).json({
       server: {
+        version: "1.0.0",
         uptimeSeconds: Math.round(process.uptime()),
         nodeVersion: process.version,
         environment: process.env.NODE_ENV || "development",
         port: process.env.PORT || 5000,
+        storageUsage,
       },
       database: {
         status: READY_STATE_LABELS[mongoose.connection.readyState] || "unknown",

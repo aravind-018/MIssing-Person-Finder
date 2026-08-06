@@ -123,15 +123,6 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // Compare password
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordMatch) {
-      return res.status(401).json({
-        message: "Invalid email or password.",
-      });
-    }
-
     // Check account status
     if (user.status === "pending") {
       return res.status(403).json({
@@ -152,6 +143,49 @@ export const loginUser = async (req, res) => {
         message:
           "Your account has been suspended. Please contact the administrator.",
       });
+    }
+
+    // Check if account is locked out
+    if (user.lockUntil && user.lockUntil > new Date()) {
+      const minutesRemaining = Math.ceil((user.lockUntil.getTime() - Date.now()) / 60000);
+      return res.status(429).json({
+        message: `Account is temporarily locked due to multiple failed login attempts. Please try again in ${minutesRemaining} minute(s).`,
+      });
+    }
+
+    // Compare password
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatch) {
+      const settings = await getSystemSettings();
+      const maxAttempts = settings.security?.maxLoginAttempts || 5;
+      const lockoutDuration = settings.security?.lockoutDuration || 15;
+
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+
+      if (user.failedLoginAttempts >= maxAttempts) {
+        user.lockUntil = new Date(Date.now() + lockoutDuration * 60 * 1000);
+        user.failedLoginAttempts = 0;
+        await user.save();
+
+        return res.status(429).json({
+          message: `Account locked due to ${maxAttempts} consecutive failed login attempts. Please try again in ${lockoutDuration} minutes.`,
+        });
+      }
+
+      await user.save();
+
+      const attemptsRemaining = maxAttempts - user.failedLoginAttempts;
+      return res.status(401).json({
+        message: `Invalid email or password. (${attemptsRemaining} attempt(s) remaining before account lockout)`,
+      });
+    }
+
+    // On successful login, reset lockout tracking
+    if (user.failedLoginAttempts > 0 || user.lockUntil) {
+      user.failedLoginAttempts = 0;
+      user.lockUntil = null;
+      await user.save();
     }
 
     // Generate JWT

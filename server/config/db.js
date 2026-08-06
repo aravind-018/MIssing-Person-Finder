@@ -3,7 +3,8 @@ import logger from "../utils/logger.js";
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/godseye";
+        await mongoose.connect(mongoUri);
 
         // MongoDB connected (production - info logs only in development)
         logger.info("MongoDB connection established");

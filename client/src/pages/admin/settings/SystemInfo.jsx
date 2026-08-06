@@ -54,13 +54,15 @@ function SystemInfo() {
       }
     >
       <SettingSection
-        title="Server"
-        description="Current backend server information."
+        title="Server & System Info"
+        description="Current backend server specifications and application version."
       >
         <div className="settings-info-grid">
+          <InfoTile label="Application Version" value={info.server.version || "1.0.0"} />
           <InfoTile label="Environment" value={info.server.environment} />
           <InfoTile label="Node Version" value={info.server.nodeVersion} />
           <InfoTile label="Port" value={info.server.port} />
+          <InfoTile label="Storage Usage" value={info.server.storageUsage || "Normal"} />
           <InfoTile label="Uptime" value={uptime} />
         </div>
       </SettingSection>

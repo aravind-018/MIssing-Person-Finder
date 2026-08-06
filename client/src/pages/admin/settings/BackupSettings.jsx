@@ -15,6 +15,16 @@ import {
   downloadBackup,
 } from "../../../services/settingsService";
 
+const validateBackup = (form) => {
+  if (
+    typeof form.retentionCount === "number" &&
+    (form.retentionCount < 1 || form.retentionCount > 60)
+  ) {
+    return "Backup retention count must be between 1 and 60 backups.";
+  }
+  return null;
+};
+
 function BackupSettings() {
   const {
     form,
@@ -24,12 +34,10 @@ function BackupSettings() {
     handleChange,
     handleReset,
     handleSave,
-  } = useSettingsForm("backup", updateBackupSettings);
+  } = useSettingsForm("backup", updateBackupSettings, validateBackup);
 
   if (loading || !form) {
-    return (
-      <LoadingSpinner text="Loading Backup Settings..." />
-    );
+    return <LoadingSpinner text="Loading Backup Settings..." />;
   }
 
   return (
@@ -37,17 +45,17 @@ function BackupSettings() {
       <SettingsCard
         icon={<FaDatabase />}
         title="Backup Settings"
-        description="Configure automatic backups and export the complete system."
+        description="Configure automated database backup schedules, locations, and export snapshots."
       >
         <SettingSection
-          title="Automatic Backup"
-          description="Configure how the system creates backup snapshots."
+          title="Automatic Backup Schedule"
+          description="Configure how and when the system automatically creates backup snapshots."
         >
           <ToggleSwitch
-            label="Enable Automatic Backup"
-            description="Automatically generate backups on the selected schedule."
+            label="Automatic Backup"
+            description="Automatically generate database backups on the selected schedule."
             name="autoBackupEnabled"
-            checked={form.autoBackupEnabled}
+            checked={form.autoBackupEnabled ?? false}
             onChange={handleChange}
           />
 
@@ -55,7 +63,7 @@ function BackupSettings() {
             label="Backup Frequency"
             description="Choose how often automatic backups are created."
             name="backupFrequency"
-            value={form.backupFrequency}
+            value={form.backupFrequency || "weekly"}
             onChange={handleChange}
             options={[
               { label: "Daily", value: "daily" },
@@ -65,11 +73,31 @@ function BackupSettings() {
           />
 
           <SettingInput
+            label="Backup Time"
+            description="Daily execution time for scheduled backups (24-hour HH:MM format)."
+            type="text"
+            name="backupTime"
+            value={form.backupTime || "02:00"}
+            onChange={handleChange}
+            placeholder="02:00"
+          />
+
+          <SettingInput
+            label="Backup Location"
+            description="Filesystem directory path where automatic backup files are stored."
+            type="text"
+            name="backupLocation"
+            value={form.backupLocation || "/var/backups/godseye"}
+            onChange={handleChange}
+            placeholder="/var/backups/godseye"
+          />
+
+          <SettingInput
             label="Retention Count"
-            description="Maximum number of backup snapshots to retain."
+            description="Maximum number of backup snapshots to retain on disk before rotation."
             type="number"
             name="retentionCount"
-            value={form.retentionCount}
+            value={form.retentionCount ?? 5}
             onChange={handleChange}
             min={1}
             max={60}
@@ -77,8 +105,8 @@ function BackupSettings() {
           />
 
           <SettingInput
-            label="Last Backup"
-            description="Time of the most recent successful backup."
+            label="Last Backup Completed"
+            description="Timestamp of the most recent successful automated or manual backup."
             value={
               form.lastBackupAt
                 ? new Date(form.lastBackupAt).toLocaleString()
@@ -89,8 +117,8 @@ function BackupSettings() {
         </SettingSection>
 
         <SettingSection
-          title="Manual Backup"
-          description="Download a complete JSON snapshot of the current system."
+          title="Download System Snapshot"
+          description="Export a full JSON snapshot of system database records."
         >
           <button
             type="button"

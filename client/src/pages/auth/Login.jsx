@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
 import { loginUser } from "../../services/authService";
+import useBranding from "../../hooks/useBranding";
 
 import "@/styles/Login.css";
 
@@ -17,6 +18,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const branding = useBranding();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -62,12 +64,18 @@ function Login() {
       {/* Login Card */}
       <div id="login-card" className="login-card">
         <h1 className="login-title">
-          Gods<span>Eye</span>
+          {branding.systemName || "GodsEye"}
         </h1>
 
         <p className="login-subtitle">
-          Missing Person Identification System
+          {branding.applicationTagline || "Missing Person Identification System"}
         </p>
+
+        {branding.organizationName && (
+          <p className="login-org-name" style={{ color: "#94a3b8", fontSize: "0.85rem", marginTop: "-0.5rem", marginBottom: "1rem" }}>
+            {branding.organizationName} {branding.departmentName ? `• ${branding.departmentName}` : ""}
+          </p>
+        )}
 
         <form onSubmit={handleLogin}>
           <FormInput

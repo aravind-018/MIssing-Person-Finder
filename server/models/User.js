@@ -89,6 +89,16 @@ department: {
       default: null,
     },
 
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    lockUntil: {
+      type: Date,
+      default: null,
+    },
+
     preferences: {
       emailAlerts: {
         type: Boolean,

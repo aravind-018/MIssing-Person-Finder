@@ -16,6 +16,23 @@ export const getSystemSettings = async () => {
     settings = await SystemSettings.create({
       singletonKey: SINGLETON_KEY,
     });
+  } else {
+    // Migration helper for legacy database enum values
+    let modified = false;
+    if (settings.ai) {
+      if (settings.ai.detectionModel === "default-detector") {
+        settings.ai.detectionModel = "buffalo_l";
+        modified = true;
+      }
+      if (settings.ai.recognitionModel === "default-recognizer") {
+        settings.ai.recognitionModel = "arcface";
+        modified = true;
+      }
+    }
+    if (modified) {
+      settings.markModified("ai");
+      await settings.save();
+    }
   }
 
   return settings;
@@ -37,13 +54,10 @@ export const updateSettingsSection = async (section, data, userId) => {
   }
 
   Object.keys(data || {}).forEach((key) => {
-    if (key in settings[section]) {
-      settings[section][key] = data[key];
-    }
+    settings[section][key] = data[key];
   });
 
   settings.markModified(section);
-
   settings.updatedBy = userId || null;
 
   await settings.save();

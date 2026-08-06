@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getSettings } from "../services/settingsService";
+import { getBranding } from "../services/settingsService";
 
 const DEFAULT_BRANDING = {
   systemName: "GodsEye",
   applicationTagline: "Missing Person Identification System",
   organizationName: "",
+  departmentName: "",
   supportEmail: "",
 };
 
@@ -16,27 +17,19 @@ function useBranding() {
 
     const loadBranding = async () => {
       try {
-        const settings = await getSettings();
+        const data = await getBranding();
 
         if (!mounted) return;
 
-        const general = settings.general || {};
-
         setBranding({
-          systemName:
-            general.systemName || DEFAULT_BRANDING.systemName,
-
+          systemName: data.systemName || DEFAULT_BRANDING.systemName,
           applicationTagline:
-            general.applicationTagline ||
-            DEFAULT_BRANDING.applicationTagline,
-
+            data.applicationTagline || DEFAULT_BRANDING.applicationTagline,
           organizationName:
-            general.organizationName ||
-            DEFAULT_BRANDING.organizationName,
-
-          supportEmail:
-            general.supportEmail ||
-            DEFAULT_BRANDING.supportEmail,
+            data.organizationName || DEFAULT_BRANDING.organizationName,
+          departmentName:
+            data.departmentName || DEFAULT_BRANDING.departmentName,
+          supportEmail: data.supportEmail || DEFAULT_BRANDING.supportEmail,
         });
       } catch (error) {
         console.error(error);

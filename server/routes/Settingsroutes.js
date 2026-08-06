@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getSettings,
+  getBranding,
   updateGeneralSettings,
   updateAISettings,
   updateCameraSettings,
@@ -17,7 +18,10 @@ import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// All system settings routes are admin-only.
+// Public branding endpoint (for login card and unauthenticated views)
+router.get("/branding", getBranding);
+
+// All other system settings routes are admin-only.
 router.use(protect, adminOnly);
 
 router.get("/", getSettings);

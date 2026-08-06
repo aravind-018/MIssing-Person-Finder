@@ -30,49 +30,45 @@ app.on("second-instance", () => {
 
 function startServices() {
     // Start backend
+    console.log("Starting Backend...");
     backendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
         cwd: path.join(__dirname, "../server"),
         windowsHide: false,
     });
 
-    // If backend emits stderr data, terminate startup to avoid running in degraded state.
-    backendProcess.stderr.on("data", () => {
-        try {
-            backendProcess.kill();
-        } catch (e) {
-            /* intentionally silent in production */
-        }
-        app.exit(1);
+    backendProcess.stdout?.on("data", (data) => {
+        console.log("[BACKEND]", data.toString());
     });
 
-    backendProcess.on("error", () => {
-        try {
-            backendProcess.kill();
-        } catch (e) {}
-        app.exit(1);
+    backendProcess.stderr?.on("data", (data) => {
+        console.error("[BACKEND STDERR]", data.toString());
+    });
+
+    backendProcess.on("error", (err) => {
+        console.error("[BACKEND ERROR]", err);
     });
 
     // Start frontend
+    console.log("Starting Frontend...");
     frontendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
         cwd: path.join(__dirname, "../client"),
         windowsHide: false,
     });
 
-    frontendProcess.stderr.on("data", () => {
-        try {
-            frontendProcess.kill();
-        } catch (e) {}
-        app.exit(1);
+    frontendProcess.stdout?.on("data", (data) => {
+        console.log("[FRONTEND]", data.toString());
     });
 
-    frontendProcess.on("error", () => {
-        try {
-            frontendProcess.kill();
-        } catch (e) {}
-        app.exit(1);
+    frontendProcess.stderr?.on("data", (data) => {
+        console.error("[FRONTEND STDERR]", data.toString());
+    });
+
+    frontendProcess.on("error", (err) => {
+        console.error("[FRONTEND ERROR]", err);
     });
 
     // Start AI service
+    console.log("Starting AI Service...");
     const defaultPython = path.join(__dirname, "../ai-services/.venv/Scripts/python.exe");
     const pythonExecutable = fs.existsSync(defaultPython) ? defaultPython : "python";
 
@@ -93,18 +89,16 @@ function startServices() {
         }
     );
 
-    aiProcess.stderr.on("data", () => {
-        try {
-            aiProcess.kill();
-        } catch (e) {}
-        app.exit(1);
+    aiProcess.stdout?.on("data", (data) => {
+        console.log("[AI]", data.toString());
     });
 
-    aiProcess.on("error", () => {
-        try {
-            aiProcess.kill();
-        } catch (e) {}
-        app.exit(1);
+    aiProcess.stderr?.on("data", (data) => {
+        console.error("[AI STDERR]", data.toString());
+    });
+
+    aiProcess.on("error", (err) => {
+        console.error("[AI ERROR]", err);
     });
 }
 

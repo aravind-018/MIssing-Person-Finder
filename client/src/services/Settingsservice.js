@@ -6,6 +6,12 @@ export const getSettings = async () => {
   return response.data;
 };
 
+// Get public system branding
+export const getBranding = async () => {
+  const response = await api.get("/settings/branding");
+  return response.data;
+};
+
 // Update General settings
 export const updateGeneralSettings = async (data) => {
   const response = await api.put("/settings/general", data);

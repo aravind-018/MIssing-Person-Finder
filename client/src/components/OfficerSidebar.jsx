@@ -13,8 +13,10 @@ import {
 import "./Sidebar.css";
 import ConfirmModal from "./common/ConfirmModal";
 import useConfirmModal from "../hooks/useConfirmModal";
+import useBranding from "../hooks/useBranding";
 
 function Sidebar() {
+  const branding = useBranding();
   const navigate = useNavigate();
   const {
   confirmModal,
@@ -25,7 +27,7 @@ function Sidebar() {
 const handleLogout = () => {
   openConfirmModal({
     title: "Logout",
-    message: "Are you sure you want to logout from GodsEye?",
+    message: `Are you sure you want to logout from ${branding.systemName || "GodsEye"}?`,
     confirmText: "Logout",
     confirmClass: "delete-btn",
 
@@ -88,8 +90,8 @@ return (
     <aside className="sidebar">
       <div className="sidebar-top">
         <div className="sidebar-logo">
-          <h1>GodsEye</h1>
-          <p>Missing Person Finder</p>
+          <h1>{branding.systemName || "GodsEye"}</h1>
+          <p>{branding.organizationName ? `${branding.organizationName} ` : ""}{branding.applicationTagline || "Missing Person Finder"}</p>
         </div>
 
         <nav className="sidebar-nav">

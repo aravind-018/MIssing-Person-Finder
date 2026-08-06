@@ -1,15 +1,18 @@
 import logo from "../../assets/logo.png";
+import useBranding from "../../hooks/useBranding";
 import "./Logo.css";
 
 export default function Logo({
   size = 48,
   showText = true,
 }) {
+  const branding = useBranding();
+
   return (
     <div className="logo">
       <img
         src={logo}
-        alt="GodsEye"
+        alt={branding.systemName || "GodsEye"}
         className="logo-image"
         style={{
           width: size,
@@ -19,8 +22,8 @@ export default function Logo({
 
       {showText && (
         <div className="logo-text">
-          <h2>GodsEye</h2>
-          <span>Missing Person Finder</span>
+          <h2>{branding.systemName || "GodsEye"}</h2>
+          <span>{branding.applicationTagline || "Missing Person Finder"}</span>
         </div>
       )}
     </div>

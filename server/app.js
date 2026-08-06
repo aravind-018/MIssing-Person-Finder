@@ -4,6 +4,7 @@ import cors from "cors";
 import personRoutes from "./routes/personRoutes.js";
 import connectDB from "./config/db.js";
 import path from "path";
+import { fileURLToPath } from "url";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import detectionRoutes from "./routes/detectionRoutes.js";
@@ -13,9 +14,10 @@ import foundReportRoutes from "./routes/foundReportRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import logger from "./utils/logger.js";
 
-// Application startup (info logs enabled only in development)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 connectDB();
 
