@@ -47,7 +47,6 @@ export const updateSettingsSection = async (section, data, userId) => {
   settings.updatedBy = userId || null;
 
   await settings.save();
-  console.log("Saving settings:", settings.security);
 
   return settings;
 };

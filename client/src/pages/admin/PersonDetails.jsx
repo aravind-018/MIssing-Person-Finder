@@ -45,7 +45,7 @@ function PersonDetails() {
     setSelectedImage(response.data.images[0]);
 }
         } catch (error) {
-            console.error(error);
+            // Error handled silently; UI remains unchanged for user
         }
     };
 

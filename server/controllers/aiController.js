@@ -104,7 +104,6 @@ export const detect = async (req, res) => {
       results,
     });
   } catch (error) {
-    console.error("Face recognition error:", error.message);
     const status = error.code === "ECONNREFUSED" ? 503 : 500;
     res.status(status).json({ success: false, message: "Face recognition could not be completed." });
   }
@@ -251,7 +250,6 @@ export const detectVideo = async (req, res) => {
       matches,
     });
   } catch (error) {
-    console.error("CCTV video recognition error:", error.message);
     const status = error.code === "ECONNREFUSED" ? 503 : 500;
     res.status(status).json({
       success: false,

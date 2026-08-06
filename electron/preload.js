@@ -1,3 +1,3 @@
 window.addEventListener("DOMContentLoaded", () => {
-  console.log("GodsEye Electron Loaded");
+  // Preload ready - no developer logs in production
 });

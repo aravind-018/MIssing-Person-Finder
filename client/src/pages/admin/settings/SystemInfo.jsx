@@ -18,7 +18,7 @@ function SystemInfo() {
       const data = await getSystemInfo();
       setInfo(data);
     } catch (error) {
-      console.error(error);
+      // Error handled for the user; avoid developer console output in production
       showError("Failed to load system information.");
     } finally {
       setLoading(false);

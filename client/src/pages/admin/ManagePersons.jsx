@@ -55,11 +55,10 @@ function handleEdit(person) {
 
         closeConfirmModal();
       } catch (error) {
-        console.error(error);
+      // Error handled for the user; avoid developer console output in production
+      showError("Failed to delete missing person.");
 
-        showError("Failed to delete missing person.");
-
-        closeConfirmModal();
+      closeConfirmModal();
       }
     },
   });
@@ -69,12 +68,10 @@ function handleEdit(person) {
   (async () => {
     try {
       const data = await getAllPersons();
-
-      console.log("Fetched data:", data);
-
+      
       setPersons(data);
     } catch (error) {
-      console.error(error);
+      // Error handled silently; UI remains unchanged for user
     }
   })();
 }, []);

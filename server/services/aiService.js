@@ -18,15 +18,11 @@ export const extractFaces = async (imagePaths) => {
     });
 
     const endpoint = `${AI_URL}/embeddings`;
-    console.log("AI endpoint:", endpoint);
-    console.log("AI image paths:", imagePaths);
 
     const { data } = await axios.post(endpoint, form, {
       headers: form.getHeaders(),
       timeout: 60000,
     });
-
-    console.log("AI Response:", data);
 
     if (!Array.isArray(data?.images)) {
       const error = new Error("AI service returned an invalid response: expected an images array.");
@@ -36,16 +32,7 @@ export const extractFaces = async (imagePaths) => {
 
     return data.images;
   } catch (error) {
-    console.error("========== ERROR ==========");
-    console.error(error);
-
-    if (error.response) {
-      console.error("Status:", error.response.status);
-      console.error("Response:", error.response.data);
-    }
-
-    console.error(error.stack);
-
+    // Propagate error to caller without leaking internal details in logs
     throw error;
   }
 };

@@ -69,7 +69,7 @@ useEffect(() => {
 
       setEditingPerson(response.data);
     } catch (error) {
-      console.error(error);
+      // Error handled for the user; avoid developer console output in production
       showError("Failed to load person details.");
     }
   };
@@ -154,7 +154,7 @@ if (editingPerson) {
 
         navigate("/admin/manage-persons");
       } catch (error) {
-        console.error(error);
+      // Error handled for the user; avoid developer console output in production
 
         showError("Update failed.");
 
@@ -181,7 +181,7 @@ if (editingPerson) {
 
        navigate("/admin/manage-persons");;
       } catch (error) {
-        console.error(error);
+        // Error handled for the user; avoid developer console output in production
 
         showError(error.response?.data?.message || "Registration failed.");
 
@@ -195,7 +195,7 @@ if (editingPerson) {
 }
 
 } catch (error) {
-  console.error(error);
+// Error handled for the user; avoid developer console output in production
 
   showError(
     editingPerson
@@ -205,7 +205,6 @@ if (editingPerson) {
 }
 };
 
-console.log(images);
 
 return (
     <div className="page">

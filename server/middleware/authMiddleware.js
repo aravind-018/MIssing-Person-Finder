@@ -1,13 +1,10 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import logger from "../utils/logger.js";
 
 export const protect = async (req, res, next) => {
   try {
     let token;
-
-    console.log("Authorization Header:", req.headers.authorization);
-
-   
 
     if (
       req.headers.authorization &&
@@ -16,13 +13,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    console.log("Decoded User:", decoded);
-
-
 
     // Find user
     const user = await User.findById(decoded.id).select("-password");
@@ -36,12 +27,10 @@ export const protect = async (req, res, next) => {
     // Attach user to request
     req.user = user;
 
-    console.log("Authenticated User:", req.user);
-
     next();
   } catch (error) {
-    console.error("Auth Middleware Error:", error);
-
+    // Log token/auth error internally
+    logger.error("Authentication error:", error);
     return res.status(401).json({
       message: "Invalid or expired token.",
     });

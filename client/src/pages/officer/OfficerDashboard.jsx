@@ -26,7 +26,7 @@ function OfficerDashboard() {
     try {
       setPersons(await getAllPersons());
     } catch (err) {
-      console.error(err);
+      // Error handled silently; UI remains unchanged for user
     }
   }
 

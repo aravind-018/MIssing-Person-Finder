@@ -6,6 +6,7 @@ import RecognitionSession from "../models/RecognitionSession.js";
 import FoundReport from "../models/FoundReport.js";
 import { getSystemSettings, updateSettingsSection } from "../services/settingsService.js";
 import { checkAI } from "../services/aiService.js";
+import logger from "../utils/logger.js";
 
 /*
     GET ALL SETTINGS
@@ -17,8 +18,8 @@ export const getSettings = async (req, res) => {
 
     res.status(200).json(settings);
   } catch (error) {
-    console.error(error);
-
+    // Log internally and return generic message to client
+    logger.error("getSettings error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -39,8 +40,8 @@ const buildSectionUpdater = (section) => async (req, res) => {
       settings,
     });
   } catch (error) {
-    console.error(error);
-
+    logger.error(`update ${section} settings error:`, error);
+    // Error handled and returned to client without revealing internal details
     res.status(error.statusCode || 500).json({
       message: error.statusCode ? error.message : "Server Error",
     });
@@ -77,6 +78,7 @@ export const getSystemInfo = async (req, res) => {
       aiServiceStatus = "online";
     } catch (_error) {
       aiServiceStatus = "unreachable";
+      logger.error("AI health check failed:", _error);
     }
 
     const [
@@ -120,8 +122,8 @@ export const getSystemInfo = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
-
+    // Log internally and return generic message to client
+    logger.error("getSystemInfo error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -214,8 +216,8 @@ export const getActivityLogs = async (req, res) => {
 
     res.status(200).json(events.slice(0, limit));
   } catch (error) {
-    console.error(error);
-
+    // Log internally and return generic message to client
+    logger.error("getActivityLogs error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -269,8 +271,8 @@ export const exportBackup = async (req, res) => {
 
     res.status(200).send(JSON.stringify(snapshot, null, 2));
   } catch (error) {
-    console.error(error);
-
+    // Log internally and return generic message to client
+    logger.error("exportBackup error:", error);
     res.status(500).json({
       message: "Server Error",
     });

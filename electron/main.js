@@ -29,55 +29,52 @@ app.on("second-instance", () => {
 });
 
 function startServices() {
-
-    console.log("Starting Backend...");
-
+    // Start backend
     backendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
         cwd: path.join(__dirname, "../server"),
         windowsHide: false,
     });
 
-    backendProcess.stdout.on("data", (data) => {
-        console.log("[BACKEND]", data.toString());
+    // If backend emits stderr data, terminate startup to avoid running in degraded state.
+    backendProcess.stderr.on("data", () => {
+        try {
+            backendProcess.kill();
+        } catch (e) {
+            /* intentionally silent in production */
+        }
+        app.exit(1);
     });
 
-    backendProcess.stderr.on("data", (data) => {
-        console.error("[BACKEND ERROR]", data.toString());
+    backendProcess.on("error", () => {
+        try {
+            backendProcess.kill();
+        } catch (e) {}
+        app.exit(1);
     });
 
-    backendProcess.on("close", (code) => {
-        console.log("[BACKEND CLOSED]", code);
-    });
-    backendProcess.on("exit", (code) => {
-    console.log("[BACKEND EXIT]", code);
-});
-
-backendProcess.on("error", (err) => {
-    console.error("[BACKEND ERROR]", err);
-});
-
-    console.log("Starting Frontend...");
-
+    // Start frontend
     frontendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
         cwd: path.join(__dirname, "../client"),
         windowsHide: false,
     });
 
-    frontendProcess.stdout.on("data", (data) => {
-        console.log("[FRONTEND]", data.toString());
+    frontendProcess.stderr.on("data", () => {
+        try {
+            frontendProcess.kill();
+        } catch (e) {}
+        app.exit(1);
     });
 
-    frontendProcess.stderr.on("data", (data) => {
-        console.error("[FRONTEND ERROR]", data.toString());
+    frontendProcess.on("error", () => {
+        try {
+            frontendProcess.kill();
+        } catch (e) {}
+        app.exit(1);
     });
 
-    console.log("Starting AI...");
-
+    // Start AI service
     const defaultPython = path.join(__dirname, "../ai-services/.venv/Scripts/python.exe");
     const pythonExecutable = fs.existsSync(defaultPython) ? defaultPython : "python";
-    if (pythonExecutable === "python") {
-        console.warn("AI service virtual environment not found; falling back to system python. Ensure the correct interpreter is available.");
-    }
 
     aiProcess = spawn(
         pythonExecutable,
@@ -96,19 +93,24 @@ backendProcess.on("error", (err) => {
         }
     );
 
-    aiProcess.stdout.on("data", (data) => {
-        console.log("[AI]", data.toString());
+    aiProcess.stderr.on("data", () => {
+        try {
+            aiProcess.kill();
+        } catch (e) {}
+        app.exit(1);
     });
 
-    aiProcess.stderr.on("data", (data) => {
-        console.error("[AI ERROR]", data.toString());
+    aiProcess.on("error", () => {
+        try {
+            aiProcess.kill();
+        } catch (e) {}
+        app.exit(1);
     });
 }
 
 async function startApp() {
 
     try {
-
         startServices();
 
         splash = new BrowserWindow({
@@ -123,8 +125,7 @@ async function startApp() {
 
         splash.loadFile(path.join(__dirname, "splash.html"));
 
-        console.log("Waiting for services...");
-
+        // Wait for services to be ready before loading the UI
         await waitOn({
             resources: [
                 "http-get://localhost:5173",
@@ -133,10 +134,6 @@ async function startApp() {
             ],
             timeout: 120000,
         });
-
-        console.log("Services Ready.");
-
-        console.log("Creating main window...");
 
         mainWindow = new BrowserWindow({
             width: 1450,
@@ -154,39 +151,33 @@ async function startApp() {
             },
         });
 
-        console.log("Main window created.");
-
         await mainWindow.loadURL("http://localhost:5173");
-
-        console.log("URL loaded.");
 
         // Show the app immediately after loadURL completes.
         splash.close();
         mainWindow.show();
 
-        // Uncomment for debugging if needed:
+        // For local debugging only: keep DevTools commented out.
         // mainWindow.webContents.openDevTools();
 
     } catch (err) {
-
-        console.error("Electron Startup Error:");
-        console.error(err);
-
+        // Close splash if created and exit with non-zero code to indicate startup failure.
         if (splash) splash.close();
-
+        app.exit(1);
     }
 }
 
 app.whenReady().then(startApp);
 
 app.on("before-quit", () => {
-
-    console.log("Stopping services...");
-
-    backendProcess?.kill();
-    frontendProcess?.kill();
-    aiProcess?.kill();
-
+    // Ensure child processes are stopped when the app quits.
+    try {
+        backendProcess?.kill();
+        frontendProcess?.kill();
+        aiProcess?.kill();
+    } catch (e) {
+        // intentionally silent
+    }
 });
 
 app.on("window-all-closed", () => {

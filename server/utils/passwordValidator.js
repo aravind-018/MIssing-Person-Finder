@@ -2,9 +2,6 @@ import { getSystemSettings } from "../services/settingsService.js";
 
 export const validatePassword = async (password) => {
   const settings = await getSystemSettings();
-  
-  console.log("Settings ID:", settings._id.toString());
-  console.log("Security:", settings.security);
   const security = settings.security;
 
   if (password.length < security.minPasswordLength) {

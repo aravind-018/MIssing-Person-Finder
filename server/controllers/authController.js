@@ -24,11 +24,7 @@ if (!name || !email || !password) {
   });
 }
 
-
-
 const passwordValidation = await validatePassword(password);
-
-
 
 if (!passwordValidation.valid) {
   return res.status(400).json({
@@ -52,7 +48,6 @@ if (!passwordValidation.valid) {
 const adminExists = await User.findOne({ role: "admin" });
 
 const settings = await getSystemSettings();
-
 
 let role = "officer";
 let status = settings.security.autoApproveOfficers
@@ -101,8 +96,7 @@ res.status(201).json({
   },
 });
   } catch (error) {
-    console.error(error);
-
+    // Error handled and returned to client without revealing internal details
     res.status(500).json({
       message: "Server Error",
     });
@@ -175,8 +169,7 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Login Error:", error);
-
+    // Error handled and returned to client without revealing internal details
     res.status(500).json({
       message: "Server Error",
     });
@@ -201,8 +194,7 @@ export const getUserProfile = async (req, res) => {
       createdAt: req.user.createdAt,
     });
   } catch (error) {
-    console.error(error);
-
+    // Error handled and returned to client without revealing internal details
     res.status(500).json({
       message: "Server Error",
     });
@@ -236,8 +228,7 @@ export const updatePreferences = async (req, res) => {
       preferences: user.preferences,
     });
   } catch (error) {
-    console.error(error);
-
+    // Error handled and returned to client without revealing internal details
     res.status(500).json({
       message: "Server Error",
     });
@@ -302,8 +293,7 @@ export const changePassword = async (req, res) => {
       message: "Password changed successfully.",
     });
   } catch (error) {
-    console.error(error);
-
+    // Error handled and returned to client without revealing internal details
     res.status(500).json({
       message: "Server Error",
     });

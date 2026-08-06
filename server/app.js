@@ -11,10 +11,9 @@ import aiRoutes from "./routes/aiRoutes.js";
 import recognitionRoutes from "./routes/recognitionRoutes.js";
 import foundReportRoutes from "./routes/foundReportRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import logger from "./utils/logger.js";
 
-console.log("=== APP STARTED ===");
-
-
+// Application startup (info logs enabled only in development)
 
 dotenv.config();
 
@@ -48,5 +47,6 @@ app.get("/health", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    // Log startup info only in development
+    logger.info(`Server listening on port ${PORT}`);
 });

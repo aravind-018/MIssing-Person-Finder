@@ -33,7 +33,7 @@ function ActivityLogs() {
       const data = await getActivityLogs();
       setLogs(data);
     } catch (error) {
-      console.error(error);
+      // Error handled for the user; avoid developer console output in production
       showError("Failed to load activity logs.");
     } finally {
       setLoading(false);

@@ -284,11 +284,7 @@ export default function PatrolLogo({
         mvCardRadius.set(readCardRadius(found));
       } else if (!warnedRef.current) {
         warnedRef.current = true;
-        // eslint-disable-next-line no-console
-        console.warn(
-          `[PatrolLogo] Could not find the login card via selector "${cardSelector}". ` +
-            "Using a centered fallback area instead."
-        );
+        // Login card not found — will use centered fallback area silently in production
       }
     }
     return cardElRef.current;

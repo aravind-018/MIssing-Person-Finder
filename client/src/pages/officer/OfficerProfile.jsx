@@ -17,7 +17,7 @@ function OfficerProfile() {
       const profile = await getProfile();
       setUser(profile);
     } catch (error) {
-      console.error(error);
+      // Error handled silently; UI remains unchanged for user
     }
   }
 

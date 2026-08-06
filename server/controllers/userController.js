@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import logger from "../utils/logger.js";
 
 /*
     GET ALL USERS
@@ -10,8 +11,8 @@ export const getAllUsers = async (req, res) => {
 
     res.status(200).json(users);
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("getAllUsers error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -31,8 +32,8 @@ export const getPendingUsers = async (req, res) => {
 
     res.status(200).json(users);
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("getPendingUsers error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -73,8 +74,8 @@ res.status(200).json({
 });
 
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("approveUser error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -113,8 +114,8 @@ export const rejectUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("rejectUser error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -153,8 +154,8 @@ export const suspendUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("suspendUser error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -193,8 +194,8 @@ export const reactivateUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("reactivateUser error:", error);
     res.status(500).json({
       message: "Server Error",
     });
@@ -228,8 +229,8 @@ export const deleteUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-
+    // Log internally, return generic message to client
+    logger.error("deleteUser error:", error);
     res.status(500).json({
       message: "Server Error",
     });

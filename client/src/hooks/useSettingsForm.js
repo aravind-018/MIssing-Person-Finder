@@ -26,7 +26,7 @@ function useSettingsForm(section, updateFn) {
         setForm(settings[section]);
         setInitial(settings[section]);
       } catch (error) {
-        console.error(error);
+        // Error handled for the user; avoid developer console output in production
         showError("Failed to load settings.");
       } finally {
         if (mounted) setLoading(false);
@@ -85,7 +85,7 @@ function useSettingsForm(section, updateFn) {
 
       showSuccess(res.message || "Settings saved successfully.");
     } catch (error) {
-      console.error(error);
+      // Error handled for the user; avoid developer console output in production
       showError(error.response?.data?.message || "Failed to save settings.");
     } finally {
       setSaving(false);

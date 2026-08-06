@@ -91,7 +91,7 @@ const {
 
       setUsers(data);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      // Error handled silently; avoid developer console output in production
     } finally {
       setLoading(false);
     }
@@ -105,7 +105,7 @@ const {
 
     fetchUsers();
   } catch (error) {
-    console.error(error);
+    // Error handled for the user; avoid developer console output in production
 
     showError("Failed to approve officer.");
   }
@@ -121,7 +121,7 @@ const handleReject = async (id) => {
 
     fetchUsers();
   } catch (error) {
-    console.error(error);
+    // Error handled for the user; avoid developer console output in production
 
     showError("Failed to reject officer.");
   }
@@ -135,7 +135,7 @@ const handleSuspend = async (id) => {
 
     fetchUsers();
   } catch (error) {
-    console.error(error);
+    // Error handled for the user; avoid developer console output in production
 
     showError("Failed to suspend officer.");
   }
@@ -149,7 +149,7 @@ const handleReactivate = async (id) => {
 
     fetchUsers();
   } catch (error) {
-    console.error(error);
+    // Error handled for the user; avoid developer console output in production
 
     showError("Failed to reactivate officer.");
   }
@@ -163,7 +163,7 @@ const handleDelete = async (id) => {
 
     fetchUsers();
   } catch (error) {
-    console.error(error);
+    // Error handled for the user; avoid developer console output in production
 
     showError("Failed to delete officer.");
   }

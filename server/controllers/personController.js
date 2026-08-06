@@ -1,5 +1,6 @@
 import Person from "../models/Person.js";
 import { extractFaces } from "../services/aiService.js";
+import logger from "../utils/logger.js";
 
 const getRegistrationEmbeddings = async (files) => {
     if (!files?.length) {
@@ -8,27 +9,12 @@ const getRegistrationEmbeddings = async (files) => {
         throw error;
     }
 
-    let analysis;
-    try {
-        analysis = await extractFaces(files.map((file) => file.path));
-        console.log("STEP 5 - AI Response:", analysis);
-    } catch (error) {
-        console.error("========== ERROR ==========");
-        console.error(error);
+    // Call AI service to extract faces and embeddings
+    const analysis = await extractFaces(files.map((file) => file.path));
 
-        if (error.response) {
-            console.error("Status:", error.response.status);
-            console.error("Response:", error.response.data);
-        }
-
-        console.error(error.stack);
-
-        throw error;
-    }
-
-    if (analysis.length !== files.length) {
+    if (!Array.isArray(analysis) || analysis.length !== files.length) {
         const error = new Error(
-            `AI service returned ${analysis.length} image result(s) for ${files.length} uploaded file(s).`
+            `AI service returned ${analysis?.length ?? 0} image result(s) for ${files.length} uploaded file(s).`
         );
         error.statusCode = 502;
         throw error;
@@ -56,17 +42,11 @@ const getRegistrationEmbeddings = async (files) => {
 
 export const registerPerson = async (req, res) => {
     try {
-        console.log("STEP 1 - Controller entered");
-        console.log("STEP 2 - Files:", req.files);
-        console.log("STEP 3 - Body:", req.body);
-
         const imageNames = req.files
             ? req.files.map((file) => file.filename)
             : [];
 
-        console.log("STEP 4 - Calling AI...");
         const faceEmbeddings = await getRegistrationEmbeddings(req.files);
-        console.log("STEP 5 - AI Response:", faceEmbeddings);
 
         if (!faceEmbeddings[0]?.embedding) {
             const error = new Error(
@@ -92,10 +72,6 @@ export const registerPerson = async (req, res) => {
 
         const caseNumber = `MP-${String(nextNumber).padStart(4, "0")}`;
 
-        console.log("Generated Case Number:", caseNumber);
-
-        console.log("STEP 6 - Saving MongoDB...");
-
         const person = await Person.create({
             ...req.body,
             caseNumber,
@@ -104,20 +80,10 @@ export const registerPerson = async (req, res) => {
             faceEmbedding: faceEmbeddings[0].embedding,
         });
 
-        console.log("STEP 7 - Saved Successfully");
-
         res.status(201).json(person);
     } catch (error) {
-        console.error("========== ERROR ==========");
-        console.error(error);
-
-        if (error.response) {
-            console.error("Status:", error.response.status);
-            console.error("Response:", error.response.data);
-        }
-
-        console.error(error.stack);
-
+        // Log internally and return a client-friendly message
+        logger.error("registerPerson error:", error);
         res.status(error.statusCode || 500).json({
             message: error.message,
         });
@@ -129,6 +95,7 @@ export const getAllPersons = async (req, res) => {
 
         res.status(200).json(persons);
     } catch (error) {
+        logger.error("getAllPersons error:", error);
         res.status(500).json({
             message: "Failed to fetch persons",
             error: error.message,
@@ -150,6 +117,7 @@ export const deletePerson = async (req, res) => {
             message: "Person deleted successfully",
         });
     } catch (error) {
+        logger.error("deletePerson error:", error);
         res.status(500).json({
             message: "Error deleting person",
             error: error.message,
@@ -185,6 +153,7 @@ export const updatePerson = async (req, res) => {
 
     res.json(person);
   } catch (error) {
+    logger.error("updatePerson error:", error);
     res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
@@ -201,6 +170,7 @@ export const getPersonById = async (req, res) => {
 
         res.status(200).json(person);
     } catch (error) {
+        logger.error("getPersonById error:", error);
         res.status(500).json({
             message: error.message,
         });
@@ -224,6 +194,7 @@ export const updatePersonStatus = async (req, res) => {
         await person.save();
         res.json(person);
     } catch (error) {
+        logger.error("updatePersonStatus error:", error);
         res.status(500).json({ message: error.message });
     }
 };
