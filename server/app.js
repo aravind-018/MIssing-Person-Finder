@@ -18,7 +18,11 @@ import logger from "./utils/logger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.join(__dirname, ".env") });
+// Load local .env only if present, but do not override process.env already provided by hosting platform
+const envPath = path.join(__dirname, ".env");
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath, override: false });
+}
 
 connectDB();
 
