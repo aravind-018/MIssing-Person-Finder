@@ -28,16 +28,16 @@ def load_face_model():
     global face_app, is_loading, model_status
     is_loading = True
     model_status = "downloading_and_initializing"
-    print("Starting InsightFace (buffalo_l) background model loading...")
+    print("Starting InsightFace (buffalo_s) background model loading...")
     try:
         app_instance = FaceAnalysis(
-            name="buffalo_l",
+            name="buffalo_s",
             providers=["CPUExecutionProvider"],
         )
         app_instance.prepare(ctx_id=-1, det_size=(640, 640))
         face_app = app_instance
         model_status = "ready"
-        print("InsightFace model (buffalo_l) loaded successfully and is ready.")
+        print("InsightFace model (buffalo_s) loaded successfully and is ready.")
     except Exception as e:
         model_status = f"error: {e}"
         print(f"Error loading InsightFace model: {e}")
