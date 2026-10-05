@@ -1,7 +1,4 @@
-.settings-page {
-  padding: 30px;
-  color: white;
-}
+.settings-page { width: 100%; color: white; box-sizing: border-box; }
 
 .settings-header {
   margin-bottom: 25px;
@@ -315,4 +312,14 @@
 
 .tag-input-row input::placeholder {
   color: #94a3b8;
+}
+@media (max-width: 480px) {
+  .settings-info-grid {
+    grid-template-columns: 1fr;
+  }
+  .settings-refresh-btn,
+  .settings-download-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

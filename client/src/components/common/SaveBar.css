@@ -94,3 +94,19 @@
 .save-bar-btn.reset:not(:disabled):hover {
   background: rgba(255, 255, 255, 0.14);
 }   
+@media (max-width: 600px) {
+  .save-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .save-bar-actions {
+    width: 100%;
+  }
+  .save-bar-btn {
+    flex: 1;
+    text-align: center;
+    padding: 11px 16px;
+  }
+}

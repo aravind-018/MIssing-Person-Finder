@@ -162,3 +162,11 @@
     display: none;
   }
 }
+@media (max-width: 640px) {
+  .ge-drone {
+    --ge-drone-size: 110px;
+  }
+  .ge-searchlight {
+    display: none;
+  }
+}

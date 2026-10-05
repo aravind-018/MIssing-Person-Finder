@@ -269,3 +269,42 @@ input:-webkit-autofill:active {
 
     border: 1px solid #334155 !important;
 }
+@media (max-width: 520px) {
+  .register-officer-page {
+    padding: 20px 12px;
+  }
+  .register-officer-card {
+    padding: 24px 16px;
+    border-radius: 14px;
+  }
+  .register-header h2 {
+    font-size: 24px;
+  }
+  .header-icon {
+    width: 58px;
+    height: 58px;
+    margin-bottom: 12px;
+  }
+  .header-icon svg {
+    font-size: 24px;
+  }
+  .register-subtitle {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .register-officer-card {
+    padding: 18px 12px;
+  }
+  .register-header h2 {
+    font-size: 20px;
+  }
+}
+
+/* In-layout override when rendered within dashboard */
+.page-content .register-officer-page {
+  min-height: auto;
+  background: transparent;
+  padding: 10px 0;
+}

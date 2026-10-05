@@ -1,8 +1,10 @@
 node_modules/
 release/
 dist/
+dist-desktop/
 uploads/
 .venv/
 __pycache__/
+*.pyc
 *.log
 .env

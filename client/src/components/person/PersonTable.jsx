@@ -1,16 +1,16 @@
 import "./PersonTable.css";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import StatusControl from "./StatusControl";
+import { getUploadUrl } from "../../utils/media";
 
 function PersonTable({ persons = [], onDelete, onStatusUpdated }) {
   const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   const basePath = location.pathname.startsWith("/admin")
-  ? "/admin"
-  : "/officer";
+    ? "/admin"
+    : "/officer";
 
   return (
     <div className="table-container">
@@ -33,11 +33,11 @@ function PersonTable({ persons = [], onDelete, onStatusUpdated }) {
           {persons.length ? (
             persons.map((person) => (
               <tr key={person._id}>
-                <td>{person.caseNumber}</td>
+                <td className="case-cell">{person.caseNumber}</td>
                 <td className="photo-cell">
                   {person.images?.length ? (
                     <img
-                      src={`/uploads/${person.images[0]}`}
+                      src={getUploadUrl(person.images[0])}
                       alt={person.name}
                       className="person-photo"
                     />
@@ -46,12 +46,14 @@ function PersonTable({ persons = [], onDelete, onStatusUpdated }) {
                   )}
                 </td>
 
-                <td>{person.name}</td>
+                <td className="name-cell">{person.name}</td>
                 <td>{person.age}</td>
                 <td>{person.gender}</td>
                 <td>{person.contact}</td>
-                <td>{person.address}</td>
-                <td><StatusControl compact person={person} onUpdated={onStatusUpdated} /></td>
+                <td className="address-cell">{person.address}</td>
+                <td>
+                  <StatusControl compact person={person} onUpdated={onStatusUpdated} />
+                </td>
 
                 <td>
                   <div className="action-buttons">
@@ -72,14 +74,14 @@ function PersonTable({ persons = [], onDelete, onStatusUpdated }) {
                     </button>
 
                     {isAdmin && (
-  <button
-    className="delete-btn"
-    onClick={() => onDelete(person._id)}
-    title="Delete"
-  >
-    <FaTrash />
-  </button>
-)}
+                      <button
+                        className="delete-btn"
+                        onClick={() => onDelete(person._id)}
+                        title="Delete"
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

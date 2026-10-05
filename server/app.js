@@ -1,10 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import personRoutes from "./routes/personRoutes.js";
-import connectDB from "./config/db.js";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
+import connectDB from "./config/db.js";
+import personRoutes from "./routes/personRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import detectionRoutes from "./routes/detectionRoutes.js";
@@ -23,10 +24,31 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
+  : null;
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || !allowedOrigins || allowedOrigins.includes(origin) || allowedOrigins.includes("*")) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json({ limit: "500mb" }));
 app.use(express.urlencoded({ limit: "500mb", extended: true }));
-app.use("/uploads", express.static("uploads"));
+
+const uploadsPath = process.env.UPLOADS_DIR || path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath, { recursive: true });
+}
+app.use("/uploads", express.static(uploadsPath));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/person", personRoutes);
@@ -37,9 +59,20 @@ app.use("/api/recognitions", recognitionRoutes);
 app.use("/api/found-report", foundReportRoutes);
 app.use("/api/settings", settingsRoutes);
 
-app.get("/", (req, res) => {
-    res.send("GodsEye API Running");
-});
+const clientDistPath = path.join(__dirname, "../client/dist");
+if (fs.existsSync(clientDistPath)) {
+    app.use(express.static(clientDistPath));
+    app.use((req, res, next) => {
+        if (req.path.startsWith("/api") || req.path.startsWith("/uploads") || req.path === "/health") {
+            return next();
+        }
+        res.sendFile(path.join(clientDistPath, "index.html"));
+    });
+} else {
+    app.get("/", (req, res) => {
+        res.send("GodsEye API Running");
+    });
+}
 
 const PORT = process.env.PORT || 5000;
 app.get("/health", (req, res) => {
@@ -50,6 +83,5 @@ app.get("/health", (req, res) => {
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-    // Log startup info only in development
     logger.info(`Server listening on port ${PORT}`);
 });

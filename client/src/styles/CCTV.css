@@ -408,3 +408,25 @@
     padding: 16px;
   }
 }
+
+@media (max-width: 480px) {
+  .cctv-upload-card,
+  .cctv-empty-state {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+  .cctv-last-seen {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  .cctv-last-seen img {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+  .cctv-processing-card {
+    padding: 22px 16px;
+  }
+}

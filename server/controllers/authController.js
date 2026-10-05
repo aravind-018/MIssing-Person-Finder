@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 import { getSystemSettings } from "../services/settingsService.js";
 import { validatePassword } from "../utils/passwordValidator.js";
+import logger from "../utils/logger.js";
 
 export const registerUser = async (req, res) => {
   try {

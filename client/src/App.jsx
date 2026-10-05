@@ -39,12 +39,13 @@ import SecuritySettings from "./pages/admin/settings/SecuritySettings";
 import BackupSettings from "./pages/admin/settings/BackupSettings";
 import SystemInfo from "./pages/admin/settings/SystemInfo";
 import ActivityLogs from "./pages/admin/settings/ActivityLogs";
+import NotFound from "./pages/NotFound";
 
 
   function App() {
 
     return (
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<Login />} />
@@ -174,6 +175,9 @@ import ActivityLogs from "./pages/admin/settings/ActivityLogs";
   </Route>
 
           </Route>
+
+          {/* Catch-all 404 Route */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     );

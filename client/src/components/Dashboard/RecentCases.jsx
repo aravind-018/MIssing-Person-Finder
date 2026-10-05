@@ -1,5 +1,6 @@
 import "./RecentCases.css";
 import { useNavigate } from "react-router-dom";
+import { getUploadUrl } from "../../utils/media";
 
 function RecentCases({ persons, detailsPath }) {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function RecentCases({ persons, detailsPath }) {
             <img
               src={
                 person.images?.length
-                  ? `/uploads/${person.images[0]}`
+                  ? getUploadUrl(person.images[0])
                   : "/placeholder.png"
               }
               alt={person.name}
@@ -43,10 +44,10 @@ function RecentCases({ persons, detailsPath }) {
 
                 <small>
                   {new Date(person.createdAt).toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-})}
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </small>
               </div>
             </div>

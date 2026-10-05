@@ -6,6 +6,7 @@
   BarElement,
   LineElement,
   PointElement,
+  Filler,
   Tooltip,
   Legend,
 } from "chart.js";
@@ -20,6 +21,7 @@
     BarElement,
     LineElement,
     PointElement,
+    Filler,
     Tooltip,
     Legend
     );

@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog } = require("electron");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const waitOn = require("wait-on");
@@ -18,92 +18,78 @@ let backendProcess;
 let frontendProcess;
 let aiProcess;
 
-app.on("second-instance", () => {
-    if (mainWindow) {
-        if (mainWindow.isMinimized()) {
-            mainWindow.restore();
-        }
+const isPackaged = app.isPackaged;
+const baseDir = isPackaged ? process.resourcesPath : path.join(__dirname, "..");
+const logFilePath = path.join(app.getPath("userData"), "godseye-desktop.log");
 
-        mainWindow.focus();
-    }
-});
+function logMessage(prefix, message) {
+    const entry = `[${new Date().toISOString()}] [${prefix}] ${message}\n`;
+    try {
+        fs.appendFileSync(logFilePath, entry);
+    } catch (e) {}
+    console.log(`[${prefix}] ${message}`);
+}
 
 function startServices() {
-    // Start backend
-    console.log("Starting Backend...");
-    backendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
-        cwd: path.join(__dirname, "../server"),
-        windowsHide: false,
-    });
+    logMessage("SYSTEM", `Starting GodsEye (isPackaged=${isPackaged}). Base directory: ${baseDir}`);
 
-    backendProcess.stdout?.on("data", (data) => {
-        console.log("[BACKEND]", data.toString());
-    });
+    const serverDir = path.join(baseDir, "server");
+    const aiDir = path.join(baseDir, "ai-services");
+    const clientDir = path.join(baseDir, "client");
 
-    backendProcess.stderr?.on("data", (data) => {
-        console.error("[BACKEND STDERR]", data.toString());
-    });
+    // 1. Start Backend Process
+    if (isPackaged) {
+        logMessage("BACKEND", `Spawning Node backend from ${serverDir}`);
+        const serverApp = path.join(serverDir, "app.js");
+        backendProcess = spawn(process.execPath, [serverApp], {
+            cwd: serverDir,
+            env: { ...process.env, ELECTRON_RUN_AS_NODE: "1", NODE_ENV: "production" },
+            windowsHide: true,
+        });
+    } else {
+        logMessage("BACKEND", `Spawning dev backend from ${serverDir}`);
+        backendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
+            cwd: serverDir,
+            windowsHide: false,
+        });
+    }
 
-    backendProcess.on("error", (err) => {
-        console.error("[BACKEND ERROR]", err);
-    });
+    backendProcess.stdout?.on("data", (data) => logMessage("BACKEND", data.toString().trim()));
+    backendProcess.stderr?.on("data", (data) => logMessage("BACKEND ERR", data.toString().trim()));
+    backendProcess.on("error", (err) => logMessage("BACKEND ERR", err.message || String(err)));
 
-    // Start frontend
-    console.log("Starting Frontend...");
-    frontendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
-        cwd: path.join(__dirname, "../client"),
-        windowsHide: false,
-    });
+    // 2. Start Frontend Process (only in dev mode; in packaged mode Express serves client/dist)
+    if (!isPackaged) {
+        logMessage("FRONTEND", `Spawning Vite dev frontend from ${clientDir}`);
+        frontendProcess = spawn("cmd.exe", ["/c", "npm run dev"], {
+            cwd: clientDir,
+            windowsHide: false,
+        });
+        frontendProcess.stdout?.on("data", (data) => logMessage("FRONTEND", data.toString().trim()));
+        frontendProcess.stderr?.on("data", (data) => logMessage("FRONTEND ERR", data.toString().trim()));
+        frontendProcess.on("error", (err) => logMessage("FRONTEND ERR", err.message || String(err)));
+    }
 
-    frontendProcess.stdout?.on("data", (data) => {
-        console.log("[FRONTEND]", data.toString());
-    });
-
-    frontendProcess.stderr?.on("data", (data) => {
-        console.error("[FRONTEND STDERR]", data.toString());
-    });
-
-    frontendProcess.on("error", (err) => {
-        console.error("[FRONTEND ERROR]", err);
-    });
-
-    // Start AI service
-    console.log("Starting AI Service...");
-    const defaultPython = path.join(__dirname, "../ai-services/.venv/Scripts/python.exe");
-    const pythonExecutable = fs.existsSync(defaultPython) ? defaultPython : "python";
+    // 3. Start AI Service Process
+    const venvPython = path.join(aiDir, ".venv", "Scripts", "python.exe");
+    const pythonExec = fs.existsSync(venvPython) ? venvPython : "python";
+    logMessage("AI", `Spawning AI service using ${pythonExec} from ${aiDir}`);
 
     aiProcess = spawn(
-        pythonExecutable,
-        [
-            "-m",
-            "uvicorn",
-            "app:app",
-            "--host",
-            "0.0.0.0",
-            "--port",
-            "8000",
-        ],
+        pythonExec,
+        ["-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"],
         {
-            cwd: path.join(__dirname, "../ai-services"),
-            windowsHide: false,
+            cwd: aiDir,
+            windowsHide: true,
         }
     );
 
-    aiProcess.stdout?.on("data", (data) => {
-        console.log("[AI]", data.toString());
-    });
-
-    aiProcess.stderr?.on("data", (data) => {
-        console.error("[AI STDERR]", data.toString());
-    });
-
-    aiProcess.on("error", (err) => {
-        console.error("[AI ERROR]", err);
-    });
+    aiProcess.stdout?.on("data", (data) => logMessage("AI", data.toString().trim()));
+    aiProcess.stderr?.on("data", (data) => logMessage("AI ERR", data.toString().trim()));
+    aiProcess.on("error", (err) => logMessage("AI ERR", err.message || String(err)));
 }
 
 async function startApp() {
-
     try {
         startServices();
 
@@ -120,14 +106,17 @@ async function startApp() {
 
         splash.loadFile(path.join(__dirname, "splash.html"));
 
-        // Wait for services to be ready before loading the UI
+        const targetUrl = isPackaged ? "http://localhost:5000" : "http://localhost:5173";
+        const resourcesToWait = isPackaged
+            ? ["http-get://localhost:5000/health", "http-get://localhost:8000/health"]
+            : ["http-get://localhost:5173", "http-get://localhost:5000/health", "http-get://localhost:8000/health"];
+
+        logMessage("SYSTEM", `Waiting for resources: ${resourcesToWait.join(", ")}`);
+
         await waitOn({
-            resources: [
-                "http-get://localhost:5173",
-                "http-get://localhost:5000",
-                "http-get://localhost:8000/health",
-            ],
+            resources: resourcesToWait,
             timeout: 120000,
+            interval: 500,
         });
 
         mainWindow = new BrowserWindow({
@@ -147,35 +136,44 @@ async function startApp() {
             },
         });
 
-        await mainWindow.loadURL("http://localhost:5173");
+        await mainWindow.loadURL(targetUrl);
 
-        // Show the app immediately after loadURL completes.
-        splash.close();
+        if (splash && !splash.isDestroyed()) splash.close();
         mainWindow.show();
-
-        // For local debugging only: keep DevTools commented out.
-        // mainWindow.webContents.openDevTools();
-
     } catch (err) {
-        // Close splash if created and exit with non-zero code to indicate startup failure.
-        if (splash) splash.close();
+        logMessage("SYSTEM ERR", `Startup failed: ${err.stack || err.message || String(err)}`);
+        if (splash && !splash.isDestroyed()) splash.close();
+        dialog.showErrorBox(
+            "GodsEye Startup Error",
+            `Failed to start GodsEye background services.\n\nError: ${err.message || String(err)}\n\nCheck logs at: ${logFilePath}`
+        );
         app.exit(1);
     }
 }
 
-app.whenReady().then(startApp);
-
-app.on("before-quit", () => {
-    // Ensure child processes are stopped when the app quits.
-    try {
-        backendProcess?.kill();
-        frontendProcess?.kill();
-        aiProcess?.kill();
-    } catch (e) {
-        // intentionally silent
+app.on("second-instance", () => {
+    if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
     }
 });
 
+app.whenReady().then(startApp);
+
+function stopChildProcesses() {
+    try {
+        if (backendProcess && !backendProcess.killed) backendProcess.kill();
+        if (frontendProcess && !frontendProcess.killed) frontendProcess.kill();
+        if (aiProcess && !aiProcess.killed) aiProcess.kill();
+    } catch (e) {
+        // silent cleanup
+    }
+}
+
+app.on("before-quit", stopChildProcesses);
+app.on("will-quit", stopChildProcesses);
+
 app.on("window-all-closed", () => {
+    stopChildProcesses();
     app.quit();
 });

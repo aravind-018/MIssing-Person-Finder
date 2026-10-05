@@ -2,10 +2,38 @@
   display: flex;
   min-height: 100vh;
   background: #0f172a;
+  color: #f8fafc;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .page-content {
   flex: 1;
-  padding: 30px;
+  min-width: 0;
+  padding: 32px 30px;
   overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-content {
+    padding: 24px 18px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    padding: 16px 12px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
 }

@@ -1,9 +1,7 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5000/api/auth";
+import api from "./api";
 
 export const loginUser = async (email, password) => {
-  const response = await axios.post(`${API_URL}/login`, {
+  const response = await api.post("/auth/login", {
     email,
     password,
   });
@@ -12,61 +10,21 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerOfficer = async (officerData) => {
-  const token = localStorage.getItem("token");
-
-  const response = await axios.post(
-    `${API_URL}/register`,
-    officerData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
+  const response = await api.post("/auth/register", officerData);
   return response.data;
 };
 
 export const getProfile = async () => {
-  const token = localStorage.getItem("token");
-
-  const response = await axios.get(`${API_URL}/profile`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
+  const response = await api.get("/auth/profile");
   return response.data;
 };
 
 export const changePassword = async (passwordData) => {
-  const token = localStorage.getItem("token");
-
-  const response = await axios.put(
-    `${API_URL}/change-password`,
-    passwordData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
+  const response = await api.put("/auth/change-password", passwordData);
   return response.data;
 };
 
 export const updatePreferences = async (preferences) => {
-  const token = localStorage.getItem("token");
-
-  const response = await axios.put(
-    `${API_URL}/preferences`,
-    preferences,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
+  const response = await api.put("/auth/preferences", preferences);
   return response.data;
 };

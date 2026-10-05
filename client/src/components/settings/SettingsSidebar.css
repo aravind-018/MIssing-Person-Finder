@@ -4,7 +4,6 @@
   gap: 6px;
 
   background: rgba(255, 255, 255, 0.05);
-
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
 
@@ -12,27 +11,22 @@
   -webkit-backdrop-filter: blur(14px);
 
   padding: 16px;
-
   position: sticky;
   top: 30px;
-
   height: fit-content;
+  box-sizing: border-box;
 }
 
 .settings-sidebar-link {
   display: flex;
   align-items: center;
   gap: 12px;
-
   padding: 12px 14px;
-
   border-radius: 12px;
-
   color: #94a3b8;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
-
   transition: background 0.2s ease, color 0.2s ease;
 }
 
@@ -56,10 +50,23 @@
   .settings-sidebar {
     position: static;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px;
+    gap: 8px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .settings-sidebar-link {
+    white-space: nowrap;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    flex-shrink: 0;
   }
 
   .settings-sidebar-link span {
-    display: none;
+    display: inline !important;
   }
 }

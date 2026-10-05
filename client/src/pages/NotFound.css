@@ -1,0 +1,107 @@
+.not-found-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.95), #020617);
+  box-sizing: border-box;
+}
+
+.not-found-card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(124, 203, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.1);
+}
+
+.not-found-icon {
+  font-size: 54px;
+  color: #f59e0b;
+  margin-bottom: 12px;
+}
+
+.not-found-code {
+  font-family: "Orbitron", sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #7ccbff;
+  margin: 0 0 8px;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.not-found-title {
+  color: #f8fafc;
+  font-size: 1.5rem;
+  margin: 0 0 12px;
+}
+
+.not-found-message {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.not-found-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  min-height: 44px;
+}
+
+.not-found-btn.primary-btn {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #fff;
+}
+
+.not-found-btn.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+.not-found-btn.secondary-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}
+
+.not-found-btn.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 480px) {
+  .not-found-card {
+    padding: 30px 18px;
+  }
+  .not-found-code {
+    font-size: 3.2rem;
+  }
+  .not-found-actions {
+    flex-direction: column;
+  }
+  .not-found-btn {
+    width: 100%;
+  }
+}

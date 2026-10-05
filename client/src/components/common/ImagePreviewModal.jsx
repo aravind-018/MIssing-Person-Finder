@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import "./ImagePreviewModal.css";
+import { getUploadUrl } from "../../utils/media";
 
 function ImagePreviewModal({ images = [], index = 0, onClose, onIndexChange, alt = "Image preview" }) {
   useEffect(() => {
@@ -14,7 +15,7 @@ function ImagePreviewModal({ images = [], index = 0, onClose, onIndexChange, alt
 
   if (!images.length) return null;
   const image = images[index];
-  const imageUrl = image.startsWith("http") ? image : `/uploads/${image}`;
+  const imageUrl = getUploadUrl(image);
 
   return <div className="image-preview-backdrop" role="dialog" aria-modal="true" aria-label={alt} onMouseDown={onClose}>
     <div className="image-preview-dialog" onMouseDown={(event) => event.stopPropagation()}>
