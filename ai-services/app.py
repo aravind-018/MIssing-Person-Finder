@@ -34,7 +34,7 @@ def load_face_model():
             name="buffalo_l",
             providers=["CPUExecutionProvider"],
         )
-        app_instance.prepare(ctx_id=0, det_size=(640, 640))
+        app_instance.prepare(ctx_id=-1, det_size=(640, 640))
         face_app = app_instance
         model_status = "ready"
         print("InsightFace model (buffalo_l) loaded successfully and is ready.")
