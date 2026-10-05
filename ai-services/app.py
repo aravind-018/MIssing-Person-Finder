@@ -4,11 +4,17 @@ The service is intentionally stateless: Express owns uploads and MongoDB, while
 this process only turns supplied images into InsightFace embeddings.
 """
 
+import os
+
+# Completely disable GPU discovery so ONNX runs strictly on CPU without checking hardware busses
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ["ORT_LOG_LEVEL"] = "3"  # 3 = Error only (suppresses warning logs)
+os.environ["OMP_NUM_THREADS"] = "1"
+
 from contextlib import asynccontextmanager
 from typing import Annotated
 import base64
 import json
-import os
 import tempfile
 
 import cv2
