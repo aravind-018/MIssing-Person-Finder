@@ -33,8 +33,9 @@ def load_face_model():
         app_instance = FaceAnalysis(
             name="buffalo_s",
             providers=["CPUExecutionProvider"],
+            allowed_modules=["detection", "recognition"],
         )
-        app_instance.prepare(ctx_id=-1, det_size=(640, 640))
+        app_instance.prepare(ctx_id=-1, det_size=(320, 320))
         face_app = app_instance
         model_status = "ready"
         print("InsightFace model (buffalo_s) loaded successfully and is ready.")
