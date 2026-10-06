@@ -24,6 +24,53 @@ button, input, select, textarea {
   font-size: inherit;
 }
 
+/* ===========================
+   Custom Scrollbar (app-wide)
+=========================== */
+
+/* Chromium / Safari / Edge */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
+  border-radius: 999px;
+  /* Transparent border + padding-box clip makes the thumb look slim and floating */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  min-height: 40px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7dd3fc 0%, #818cf8 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #0ea5e9 0%, #4f46e5 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox only (Chrome 121+ would otherwise ignore the rules above) */
+@supports (-moz-appearance: none) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #38bdf8 rgba(15, 23, 42, 0.6);
+  }
+}
+
 .page-title {
   font-family: "Orbitron", sans-serif;
   font-size: 2.5rem;

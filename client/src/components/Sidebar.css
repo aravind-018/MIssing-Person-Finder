@@ -22,8 +22,11 @@
 
   position: sticky;
   top: 0;
+  align-self: flex-start;
   z-index: 50;
-  overflow-y: auto;
+  /* The sidebar itself never scrolls: only the nav list does (see .sidebar-nav),
+     which keeps the Logout button pinned and fully visible at the bottom. */
+  overflow: hidden;
 }
 
 /* ===========================
@@ -33,6 +36,8 @@
 .sidebar-top {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .sidebar-header-row {
@@ -99,6 +104,39 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  /* Only the menu scrolls when the window is short */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Room for the hover slide + scrollbar so nothing is clipped */
+  padding: 2px 8px 12px 0;
+  margin-right: -8px;
+}
+
+/* Slimmer, softer scrollbar just for the sidebar menu */
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.35);
+  border: none;
+  border-radius: 999px;
+}
+
+.sidebar-nav:hover::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
+}
+
+.sidebar-header-row,
+.sidebar-top > .sidebar-logo {
+  flex-shrink: 0;
 }
 
 /* ===========================
@@ -145,6 +183,8 @@
 =========================== */
 
 .sidebar-bottom {
+  flex-shrink: 0;
+  margin-top: 12px;
   padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
