@@ -1,10 +1,5 @@
-import { useState, useEffect } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import {
-  FaSignOutAlt,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa";
 
 import "./Sidebar.css";
 import ConfirmModal from "./common/ConfirmModal";
@@ -12,27 +7,8 @@ import useConfirmModal from "../hooks/useConfirmModal";
 import useBranding from "../hooks/useBranding";
 
 function Sidebar({ menuItems }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const branding = useBranding();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // Automatically close mobile menu when navigating
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
-
-  // Lock body scroll when mobile drawer is open
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
 
   const {
     confirmModal,
@@ -41,7 +17,6 @@ function Sidebar({ menuItems }) {
   } = useConfirmModal();
 
   const handleLogout = () => {
-    setMobileOpen(false);
     openConfirmModal({
       title: "Logout",
       message: `Are you sure you want to logout from ${branding.systemName || "GodsEye"}?`,
@@ -58,33 +33,7 @@ function Sidebar({ menuItems }) {
 
   return (
     <>
-      {/* Mobile Top Header (hidden on desktop) */}
-      <header className="mobile-header">
-        <div className="mobile-header-brand">
-          <h1>{branding.systemName || "GodsEye"}</h1>
-          <span className="mobile-header-tagline">
-            {branding.applicationTagline || "Missing Person Finder"}
-          </span>
-        </div>
-        <button
-          type="button"
-          className="mobile-menu-btn"
-          onClick={() => setMobileOpen((open) => !open)}
-          aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={mobileOpen}
-        >
-          {mobileOpen ? <FaTimes /> : <FaBars />}
-        </button>
-      </header>
-
-      {/* Dimmed backdrop for mobile drawer */}
-      <div
-        className={`sidebar-backdrop ${mobileOpen ? "open" : ""}`}
-        onClick={() => setMobileOpen(false)}
-        aria-hidden="true"
-      />
-
-      <aside className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}>
+      <aside className="sidebar">
         <div className="sidebar-top">
           <div className="sidebar-header-row">
             <div className="sidebar-logo">
@@ -94,14 +43,6 @@ function Sidebar({ menuItems }) {
                 {branding.applicationTagline || "Missing Person Finder"}
               </p>
             </div>
-            <button
-              type="button"
-              className="sidebar-close-btn"
-              onClick={() => setMobileOpen(false)}
-              aria-label="Close navigation"
-            >
-              <FaTimes />
-            </button>
           </div>
 
           <nav className="sidebar-nav">
@@ -109,7 +50,6 @@ function Sidebar({ menuItems }) {
               <NavLink
                 key={item.title}
                 to={item.path}
-                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   isActive ? "sidebar-link active" : "sidebar-link"
                 }
