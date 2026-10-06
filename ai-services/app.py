@@ -21,7 +21,7 @@ import cv2
 import numpy as np
 import onnxruntime
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from insightface.app import FaceAnalysis
+from insightface.app.common import Face
 from insightface.model_zoo.arcface_onnx import ArcFaceONNX
 from insightface.model_zoo.scrfd import SCRFD
 from insightface.utils import ensure_available
@@ -31,7 +31,7 @@ import gc
 import glob
 import threading
 
-face_app: FaceAnalysis | None = None
+face_app: "LeanFaceAnalysis | None" = None
 is_loading: bool = False
 model_status: str = "not_started"
 
@@ -55,12 +55,14 @@ def lean_session_options() -> onnxruntime.SessionOptions:
     return options
 
 
-class LeanFaceAnalysis(FaceAnalysis):
-    """FaceAnalysis that only opens the detection and recognition models.
+class LeanFaceAnalysis:
+    """Minimal face pipeline that only opens the detection and recognition models.
 
     The stock FaceAnalysis constructor opens *every* ONNX file in the pack
     (landmarks, gender/age, ...) before discarding the unused ones, which spikes
     memory past 512 MB on startup. Here we pick the two files we need by name.
+    It is deliberately standalone (not a FaceAnalysis subclass) so changes to
+    FaceAnalysis internals across insightface versions can't break it.
     """
 
     def __init__(self, name: str = MODEL_PACK, root: str = "~/.insightface"):  # noqa: D107
@@ -85,6 +87,24 @@ class LeanFaceAnalysis(FaceAnalysis):
         if "detection" not in self.models or "recognition" not in self.models:
             raise RuntimeError(f"Could not find detection/recognition models in {self.model_dir}")
         self.det_model = self.models["detection"]
+        self.rec_model = self.models["recognition"]
+
+    def prepare(self, ctx_id: int = 0, det_thresh: float = 0.5, det_size=DET_SIZE) -> None:
+        self.det_model.prepare(ctx_id, input_size=tuple(det_size), det_thresh=det_thresh)
+        self.rec_model.prepare(ctx_id)
+
+    def get(self, img: np.ndarray, max_num: int = 0) -> list[Face]:
+        bboxes, kpss = self.det_model.detect(img, max_num=max_num, metric="default")
+        faces = []
+        for i in range(bboxes.shape[0]):
+            face = Face(
+                bbox=bboxes[i, 0:4],
+                kps=kpss[i] if kpss is not None else None,
+                det_score=bboxes[i, 4],
+            )
+            self.rec_model.get(img, face)  # sets face.embedding
+            faces.append(face)
+        return faces
 
 
 def load_face_model():

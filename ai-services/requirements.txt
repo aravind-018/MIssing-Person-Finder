@@ -1,7 +1,9 @@
 fastapi
 uvicorn[standard]
-insightface
-onnxruntime
+# Pinned to the versions verified locally; unpinned installs pulled insightface 2.x
+# on Render, which changed internals the service relies on.
+insightface==1.0.1
+onnxruntime==1.28.0
 numpy
 opencv-python-headless
 python-multipart
