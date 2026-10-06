@@ -9,6 +9,25 @@ export const checkAI = async () => {
   return data;
 };
 
+const describeAIError = (error) => {
+  if (error.statusCode) return error;
+
+  const wrapped = new Error(error.message);
+  if (error.response) {
+    // AI service answered with an error (e.g. 503 "Face model is still loading.")
+    const detail = error.response.data?.detail || error.response.statusText;
+    wrapped.statusCode = error.response.status === 503 ? 503 : 502;
+    wrapped.message = `AI service error (${error.response.status}): ${detail || "unknown error"}`;
+  } else if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") {
+    wrapped.statusCode = 504;
+    wrapped.message = "AI service timed out. It may be waking up from sleep — please retry in a minute.";
+  } else {
+    wrapped.statusCode = 503;
+    wrapped.message = `AI service is unreachable at ${AI_URL} (${error.code || error.message}).`;
+  }
+  return wrapped;
+};
+
 export const extractFaces = async (imagePaths) => {
   try {
     const form = new FormData();
@@ -21,7 +40,8 @@ export const extractFaces = async (imagePaths) => {
 
     const { data } = await axios.post(endpoint, form, {
       headers: form.getHeaders(),
-      timeout: 60000,
+      // Generous timeout: Render free instances can take ~60s to wake up.
+      timeout: 120000,
     });
 
     if (!Array.isArray(data?.images)) {
@@ -32,8 +52,8 @@ export const extractFaces = async (imagePaths) => {
 
     return data.images;
   } catch (error) {
-    // Propagate error to caller without leaking internal details in logs
-    throw error;
+    // Propagate a descriptive error to the caller
+    throw describeAIError(error);
   }
 };
 
