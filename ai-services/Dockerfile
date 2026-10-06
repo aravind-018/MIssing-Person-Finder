@@ -10,12 +10,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
+# Keep memory usage low on small instances (Render free tier = 512 MB)
+ENV MALLOC_ARENA_MAX=2 \
+    OMP_NUM_THREADS=1 \
+    PYTHONUNBUFFERED=1
+
 # Copy requirements and install Python packages
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download and bake InsightFace lightweight models into the image during build
-RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_s', providers=['CPUExecutionProvider'], allowed_modules=['detection', 'recognition']); app.prepare(ctx_id=-1, det_size=(320, 320))"
+# Pre-download the InsightFace lightweight model pack into the image during build
+RUN python -c "from insightface.utils import ensure_available; print(ensure_available('models', 'buffalo_s', root='~/.insightface'))"
 
 # Copy application source code
 COPY . .

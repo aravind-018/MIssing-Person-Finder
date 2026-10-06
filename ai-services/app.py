@@ -19,37 +19,94 @@ import tempfile
 
 import cv2
 import numpy as np
+import onnxruntime
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from insightface.app import FaceAnalysis
+from insightface.model_zoo.arcface_onnx import ArcFaceONNX
+from insightface.model_zoo.scrfd import SCRFD
+from insightface.utils import ensure_available
 
 
+import gc
+import glob
 import threading
 
 face_app: FaceAnalysis | None = None
 is_loading: bool = False
 model_status: str = "not_started"
 
+MODEL_PACK = "buffalo_s"
+DET_SIZE = (320, 320)
+
+
+def lean_session_options() -> onnxruntime.SessionOptions:
+    """ONNX Runtime options tuned for small-memory hosts (e.g. Render free tier, 512 MB).
+
+    Disabling the CPU memory arena and memory-pattern planning stops ONNX Runtime
+    from pre-allocating and holding onto large buffers between requests.
+    """
+    options = onnxruntime.SessionOptions()
+    options.enable_cpu_mem_arena = False
+    options.enable_mem_pattern = False
+    options.intra_op_num_threads = 1
+    options.inter_op_num_threads = 1
+    options.execution_mode = onnxruntime.ExecutionMode.ORT_SEQUENTIAL
+    options.log_severity_level = 3
+    return options
+
+
+class LeanFaceAnalysis(FaceAnalysis):
+    """FaceAnalysis that only opens the detection and recognition models.
+
+    The stock FaceAnalysis constructor opens *every* ONNX file in the pack
+    (landmarks, gender/age, ...) before discarding the unused ones, which spikes
+    memory past 512 MB on startup. Here we pick the two files we need by name.
+    """
+
+    def __init__(self, name: str = MODEL_PACK, root: str = "~/.insightface"):  # noqa: D107
+        onnxruntime.set_default_logger_severity(3)
+        self.models = {}
+        self.model_dir = ensure_available("models", name, root=root)
+        providers = ["CPUExecutionProvider"]
+
+        for onnx_file in sorted(glob.glob(os.path.join(self.model_dir, "*.onnx"))):
+            filename = os.path.basename(onnx_file).lower()
+            if filename.startswith("det_") and "detection" not in self.models:
+                session = onnxruntime.InferenceSession(
+                    onnx_file, sess_options=lean_session_options(), providers=providers
+                )
+                self.models["detection"] = SCRFD(model_file=onnx_file, session=session)
+            elif filename.startswith("w600k") and "recognition" not in self.models:
+                session = onnxruntime.InferenceSession(
+                    onnx_file, sess_options=lean_session_options(), providers=providers
+                )
+                self.models["recognition"] = ArcFaceONNX(model_file=onnx_file, session=session)
+
+        if "detection" not in self.models or "recognition" not in self.models:
+            raise RuntimeError(f"Could not find detection/recognition models in {self.model_dir}")
+        self.det_model = self.models["detection"]
+
 
 def load_face_model():
     global face_app, is_loading, model_status
     is_loading = True
     model_status = "downloading_and_initializing"
-    print("Starting InsightFace (buffalo_s) background model loading...", flush=True)
+    print(f"Starting InsightFace ({MODEL_PACK}) background model loading...", flush=True)
     try:
-        app_instance = FaceAnalysis(
-            name="buffalo_s",
-            providers=["CPUExecutionProvider"],
-            allowed_modules=["detection", "recognition"],
-        )
-        app_instance.prepare(ctx_id=-1, det_size=(320, 320))
+        app_instance = LeanFaceAnalysis(name=MODEL_PACK)
+        # ctx_id=0 skips insightface's set_providers() call, which would rebuild
+        # each session; the sessions are already CPU-only.
+        app_instance.prepare(ctx_id=0, det_size=DET_SIZE)
         face_app = app_instance
         model_status = "ready"
-        print("InsightFace model (buffalo_s) loaded successfully and is ready.", flush=True)
+        print(f"InsightFace model ({MODEL_PACK}) loaded successfully and is ready.", flush=True)
     except Exception as e:
         model_status = f"error: {e}"
         print(f"Error loading InsightFace model: {e}", flush=True)
     finally:
         is_loading = False
+        gc.collect()
+
 
 
 @asynccontextmanager
@@ -229,7 +286,9 @@ async def recognize_video(
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temporary_file:
             temporary_path = temporary_file.name
-            temporary_file.write(await video.read())
+            # Stream in 1 MB chunks so large CCTV files never sit fully in RAM.
+            while chunk := await video.read(1024 * 1024):
+                temporary_file.write(chunk)
 
         capture = cv2.VideoCapture(temporary_path)
         if not capture.isOpened():
