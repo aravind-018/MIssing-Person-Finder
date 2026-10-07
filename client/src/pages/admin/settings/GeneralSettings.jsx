@@ -1,11 +1,9 @@
-import {
-  FaCog,
-  FaGlobe,
-} from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
 
 import LoadingSpinner from "../../../components/common/LoadingSpinner";
 import SettingsCard from "../../../components/common/SettingsCard";
 import SaveBar from "../../../components/common/SaveBar";
+import ThemeToggle from "../../../components/common/ThemeToggle";
 
 import SettingSection from "../../../components/settings/SettingSection";
 import SettingInput from "../../../components/settings/SettingInput";
@@ -104,6 +102,21 @@ function GeneralSettings() {
               },
             ]}
           />
+        </SettingSection>
+
+        <SettingSection
+          title="Appearance"
+          description="Visual appearance and theme preferences."
+        >
+          <div className="setting-field">
+            <div className="setting-field-label">Interface Theme</div>
+            <p className="setting-field-description">
+              Choose between Dark Mode and Light Mode.
+            </p>
+            <div className="setting-field-control" style={{ maxWidth: "280px" }}>
+              <ThemeToggle />
+            </div>
+          </div>
         </SettingSection>
 
         <SettingSection

@@ -3,6 +3,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 
 import "./Sidebar.css";
 import ConfirmModal from "./common/ConfirmModal";
+import ThemeToggle from "./common/ThemeToggle";
 import useConfirmModal from "../hooks/useConfirmModal";
 import useBranding from "../hooks/useBranding";
 
@@ -62,6 +63,10 @@ function Sidebar({ menuItems }) {
         </div>
 
         <div className="sidebar-bottom">
+          <div className="sidebar-theme-wrapper">
+            <ThemeToggle />
+          </div>
+
           <button
             className="logout-btn"
             onClick={handleLogout}

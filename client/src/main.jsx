@@ -4,19 +4,29 @@ import './index.css'
 import App from './App.jsx'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+
+function ThemedToastContainer() {
+  const { theme } = useTheme();
+  return (
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      pauseOnHover
+      theme={theme}
+    />
+  );
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <App />
-
-  <ToastContainer
-    position="top-right"
-    autoClose={3000}
-    hideProgressBar={false}
-    newestOnTop
-    closeOnClick
-    pauseOnHover
-    theme="dark"
-  />
+    <ThemeProvider>
+      <App />
+      <ThemedToastContainer />
+    </ThemeProvider>
   </StrictMode>,
 )
+

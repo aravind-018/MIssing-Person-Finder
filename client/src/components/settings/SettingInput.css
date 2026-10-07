@@ -5,7 +5,7 @@
 
   padding: 14px 0;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .setting-field:last-child {
@@ -13,13 +13,13 @@
 }
 
 .setting-field-label {
-  color: #e2e8f0;
+  color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 600;
 }
 
 .setting-field-description {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.83rem;
   margin: 0 0 4px 0;
 }
@@ -36,13 +36,13 @@
 .setting-field-control select {
   flex: 1;
 
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
   border-radius: 10px;
 
   padding: 11px 14px;
 
-  color: white;
+  color: var(--text-primary);
   font-size: 0.95rem;
 
   outline: none;
@@ -63,12 +63,12 @@
 }
 
 .setting-field-control select option {
-  background: #0f172a;
-  color: white;
+  background: var(--bg-surface);
+  color: var(--text-primary);
 }
 
 .setting-field-suffix {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.85rem;
   white-space: nowrap;
 }

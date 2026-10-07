@@ -1,8 +1,8 @@
 .main-layout {
   display: flex;
   min-height: 100vh;
-  background: #0f172a;
-  color: #f8fafc;
+  background: var(--bg-app);
+  color: var(--text-primary);
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;

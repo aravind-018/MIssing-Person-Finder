@@ -8,7 +8,7 @@
 }
 
 .chart-card {
-  background: #1f2937;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 20px;
   min-height: 340px;
@@ -18,12 +18,13 @@
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-md);
 }
 
 .chart-card h2 {
   margin-bottom: 16px;
-  color: white;
+  color: var(--text-heading);
   font-size: 1.15rem;
   font-weight: 600;
 }
@@ -36,7 +37,7 @@
 .chart-note {
   grid-column: 1 / -1;
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-muted);
   margin-top: 20px;
   font-size: 14px;
 }

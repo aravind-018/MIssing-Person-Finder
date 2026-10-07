@@ -13,6 +13,7 @@
 
     import { Pie, Bar, Line } from "react-chartjs-2";
     import "./DashboardCharts.css";
+    import { useTheme } from "../../context/ThemeContext";
 
     ChartJS.register(
     ArcElement,
@@ -27,6 +28,11 @@
     );
 
     function DashboardCharts({ persons }) {
+    const { theme } = useTheme();
+    const isLight = theme === "light";
+    const tickColor = isLight ? "#475569" : "#94a3b8";
+    const gridColor = isLight ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.07)";
+
     const missing = persons.filter(
         (p) => p.status === "Missing"
     ).length;
@@ -138,6 +144,18 @@
             beginAtZero: true,
             ticks: {
             precision: 0,
+            color: tickColor,
+            },
+            grid: {
+            color: gridColor,
+            },
+        },
+        y: {
+            ticks: {
+            color: tickColor,
+            },
+            grid: {
+            color: gridColor,
             },
         },
         },
@@ -161,10 +179,22 @@
             },
         },
         scales: {
+            x: {
+            ticks: {
+                color: tickColor,
+            },
+            grid: {
+                color: gridColor,
+            },
+            },
             y: {
             beginAtZero: true,
             ticks: {
                 precision: 0,
+                color: tickColor,
+            },
+            grid: {
+                color: gridColor,
             },
             },
         },

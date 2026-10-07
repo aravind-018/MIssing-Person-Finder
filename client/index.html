@@ -7,6 +7,19 @@
     <meta name="theme-color" content="#0F172A" />
     <meta name="description" content="GodsEye — AI-Powered Missing Person Identification and CCTV Video Analysis Platform" />
     <title>GodsEye — AI-Based Missing Person Finder</title>
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('godseye-theme');
+          var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute('content', theme === 'light' ? '#F1F5F9' : '#0F172A');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

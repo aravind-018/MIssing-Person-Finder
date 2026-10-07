@@ -1,3 +1,148 @@
+/* ==============================================================================
+   GodsEye Central Design System & Theme Tokens
+   ============================================================================== */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* App & Surface Backgrounds */
+  --bg-app: #0F172A;
+  --bg-surface: #1f2937;
+  --bg-surface-elevated: #182235;
+  --bg-surface-subtle: rgba(255, 255, 255, 0.05);
+  --bg-surface-hover: #273449;
+  --bg-surface-active: #334155;
+  
+  /* Sidebar */
+  --bg-sidebar: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(10, 16, 31, 0.98) 100%);
+  --sidebar-border: rgba(56, 189, 248, 0.12);
+  --sidebar-shadow: 4px 0 24px rgba(0, 0, 0, 0.28);
+  
+  /* Form Controls */
+  --bg-input: #334155;
+  --bg-input-subtle: rgba(255, 255, 255, 0.06);
+  --bg-input-focus: #1e293b;
+  --border-input: #374151;
+  
+  /* Text */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-heading: #ffffff;
+  --text-title-accent: #7CCBFF;
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: #374151;
+  --border-strong: #475569;
+  --border-card: rgba(255, 255, 255, 0.08);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.35);
+
+  /* Card & Glass */
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-hover: rgba(255, 255, 255, 0.1);
+
+  /* Table */
+  --table-bg: #111827;
+  --table-header-bg: #1f2937;
+  --table-row-even: #1a2433;
+  --table-row-hover: #273449;
+  --table-border: #374151;
+
+  /* Modals */
+  --modal-bg: rgba(20, 30, 48, 0.98);
+  --modal-border: rgba(125, 211, 252, 0.18);
+  --overlay-bg: rgba(0, 0, 0, 0.65);
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(15, 23, 42, 0.6);
+  --scrollbar-thumb: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
+  --scrollbar-thumb-hover: linear-gradient(180deg, #7dd3fc 0%, #818cf8 100%);
+
+  /* Primary Brand & Accents (Preserved) */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent-cyan: #38bdf8;
+  --accent-blue: #60a5fa;
+  --accent-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* App & Surface Backgrounds */
+  --bg-app: #F1F5F9;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #FFFFFF;
+  --bg-surface-subtle: #F8FAFC;
+  --bg-surface-hover: #E2E8F0;
+  --bg-surface-active: #CBD5E1;
+  
+  /* Sidebar */
+  --bg-sidebar: #FFFFFF;
+  --sidebar-border: #E2E8F0;
+  --sidebar-shadow: 4px 0 20px rgba(15, 23, 42, 0.06);
+  
+  /* Form Controls */
+  --bg-input: #FFFFFF;
+  --bg-input-subtle: #F8FAFC;
+  --bg-input-focus: #FFFFFF;
+  --border-input: #CBD5E1;
+  
+  /* Text */
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-heading: #0F172A;
+  --text-title-accent: #0284C7;
+
+  /* Borders & Dividers */
+  --border-subtle: #E2E8F0;
+  --border-default: #CBD5E1;
+  --border-strong: #94A3B8;
+  --border-card: #E2E8F0;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.09);
+
+  /* Card & Glass */
+  --glass-bg: #FFFFFF;
+  --glass-border: #E2E8F0;
+  --glass-hover: #F8FAFC;
+
+  /* Table */
+  --table-bg: #FFFFFF;
+  --table-header-bg: #F8FAFC;
+  --table-row-even: #F8FAFC;
+  --table-row-hover: #F1F5F9;
+  --table-border: #E2E8F0;
+
+  /* Modals */
+  --modal-bg: #FFFFFF;
+  --modal-border: #E2E8F0;
+  --overlay-bg: rgba(15, 23, 42, 0.5);
+
+  /* Scrollbar */
+  --scrollbar-track: #E2E8F0;
+  --scrollbar-thumb: linear-gradient(180deg, #0ea5e9 0%, #6366f1 100%);
+  --scrollbar-thumb-hover: linear-gradient(180deg, #38bdf8 0%, #818cf8 100%);
+
+  /* Primary Brand & Accents */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent-cyan: #0284c7;
+  --accent-blue: #2563eb;
+  --accent-gradient: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -9,9 +154,10 @@ html, body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  background: #0F172A;
-  color: #f8fafc;
+  background: var(--bg-app);
+  color: var(--text-primary);
   -webkit-text-size-adjust: 100%;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 img, video {
@@ -35,20 +181,19 @@ button, input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #38bdf8 0%, #6366f1 100%);
+  background: var(--scrollbar-thumb);
   border-radius: 999px;
-  /* Transparent border + padding-box clip makes the thumb look slim and floating */
   border: 2px solid transparent;
   background-clip: padding-box;
   min-height: 40px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #7dd3fc 0%, #818cf8 100%);
+  background: var(--scrollbar-thumb-hover);
   border: 2px solid transparent;
   background-clip: padding-box;
 }
@@ -63,11 +208,11 @@ button, input, select, textarea {
   background: transparent;
 }
 
-/* Firefox only (Chrome 121+ would otherwise ignore the rules above) */
+/* Firefox only */
 @supports (-moz-appearance: none) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #38bdf8 rgba(15, 23, 42, 0.6);
+    scrollbar-color: #38bdf8 var(--scrollbar-track);
   }
 }
 
@@ -75,7 +220,7 @@ button, input, select, textarea {
   font-family: "Orbitron", sans-serif;
   font-size: 2.5rem;
   font-weight: 800;
-  color: #7CCBFF;
+  color: var(--text-title-accent);
   text-align: center;
   letter-spacing: 2px;
   display: inline-block;

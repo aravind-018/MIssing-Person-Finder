@@ -3,9 +3,9 @@
   border-radius: 16px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  background: #111827;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--table-bg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-card);
   width: 100%;
   box-sizing: border-box;
 }
@@ -14,11 +14,11 @@
   width: 100%;
   min-width: 760px;
   border-collapse: collapse;
-  color: #e5e7eb;
+  color: var(--text-primary);
 }
 
 .person-table thead {
-  background: #1f2937;
+  background: var(--table-header-bg);
 }
 
 .person-table th {
@@ -27,13 +27,13 @@
   font-size: 14.5px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #f9fafb;
+  color: var(--text-heading);
   white-space: nowrap;
 }
 
 .person-table td {
   padding: 14px 18px;
-  border-top: 1px solid #374151;
+  border-top: 1px solid var(--table-border);
   font-size: 14.5px;
 }
 
@@ -42,11 +42,11 @@
 }
 
 .person-table tbody tr:nth-child(even) {
-  background: #1a2433;
+  background: var(--table-row-even);
 }
 
 .person-table tbody tr:hover {
-  background: #273449;
+  background: var(--table-row-hover);
 }
 
 .photo-cell {
@@ -59,23 +59,23 @@
   height: 56px;
   object-fit: cover;
   border-radius: 10px;
-  border: 2px solid #374151;
+  border: 2px solid var(--border-default);
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
 .person-photo:hover {
   transform: scale(1.08);
-  border-color: #3b82f6;
+  border-color: var(--accent-blue);
 }
 
 .no-image {
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 13px;
 }
 
 .case-cell {
   font-weight: 600;
-  color: #7ccbff;
+  color: var(--text-title-accent);
   white-space: nowrap;
 }
 
@@ -130,7 +130,7 @@
 .no-data {
   text-align: center;
   padding: 35px;
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 15px;
 }
 
@@ -144,18 +144,18 @@
   display: block;
   padding: 12px 18px;
   margin: 15px 0;
-  border: 1px solid #374151;
+  border: 1px solid var(--border-input);
   border-radius: 10px;
   font-size: 15px;
-  background: #1f2937;
-  color: #fff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search-box::placeholder {
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .search-box:focus {
@@ -172,16 +172,21 @@
 
 .filters select {
   padding: 10px 14px;
-  border: 1px solid #374151;
+  border: 1px solid var(--border-input);
   border-radius: 8px;
-  background: #1f2937;
-  color: #fff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
   font-size: 14px;
   cursor: pointer;
   outline: none;
   flex: 1 1 160px;
   min-width: 140px;
   transition: border-color 0.2s ease;
+}
+
+.filters select option {
+  background: var(--bg-surface);
+  color: var(--text-primary);
 }
 
 .filters select:focus {

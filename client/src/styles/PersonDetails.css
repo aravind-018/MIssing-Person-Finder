@@ -12,17 +12,17 @@
 }
 
 .subtitle {
-  color: #9fb3c8;
+  color: var(--text-muted);
   font-size: 16px;
   margin-top: 6px;
 }
 
 .details-card {
-  background: #182235;
-  border: 1px solid rgba(124, 203, 255, 0.15);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-card);
   border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-md);
   box-sizing: border-box;
 }
 
@@ -44,8 +44,8 @@
   height: auto;
   border-radius: 14px;
   overflow: hidden;
-  background: #111827;
-  border: 1px solid rgba(124, 203, 255, 0.2);
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,8 +101,8 @@
 }
 
 .summary-card {
-  background: #202c42;
-  border: 1px solid rgba(124, 203, 255, 0.12);
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
   padding: 16px;
   border-radius: 12px;
   text-align: center;
@@ -111,19 +111,19 @@
 
 .summary-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .summary-card h4 {
   margin: 8px 0 4px;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .summary-card p {
-  color: #ffffff;
+  color: var(--text-heading);
   font-size: 18px;
   font-weight: 700;
   margin: 0;
@@ -132,7 +132,7 @@
 
 .summary-icon {
   font-size: 24px;
-  color: #7ccbff;
+  color: var(--text-title-accent);
 }
 
 /* ===========================
@@ -146,8 +146,8 @@
 }
 
 .detail-item {
-  background: #202c42;
-  border: 1px solid rgba(124, 203, 255, 0.12);
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
   padding: 16px;
   border-radius: 12px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -155,7 +155,7 @@
 
 .detail-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .detail-item.full-width {
@@ -167,18 +167,18 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
-  color: #7ccbff;
+  color: var(--accent-cyan);
   font-weight: 600;
   font-size: 14px;
 }
 
 .detail-item strong svg {
-  color: #7ccbff !important;
+  color: var(--accent-cyan) !important;
 }
 
 .detail-item p {
   margin: 0;
-  color: #e5e7eb;
+  color: var(--text-primary);
   font-size: 15px;
   line-height: 1.5;
   word-break: break-word;
@@ -197,9 +197,9 @@
 }
 
 .back-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #cbd5e1;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
   padding: 12px 26px;
   border-radius: 10px;
   cursor: pointer;
@@ -209,7 +209,7 @@
 }
 
 .back-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--bg-surface-hover);
 }
 
 .details-edit-btn {

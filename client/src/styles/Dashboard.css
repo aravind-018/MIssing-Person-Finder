@@ -1,6 +1,6 @@
 .dashboard-container {
   width: 100%;
-  color: white;
+  color: var(--text-primary);
   box-sizing: border-box;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .section-title {
-  color: white;
+  color: var(--text-heading);
   margin-bottom: 20px;
   font-size: 26px;
   font-weight: 700;

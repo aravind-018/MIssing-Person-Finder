@@ -1,0 +1,110 @@
+/* ==============================================================================
+   GodsEye Theme Toggle Stylesheet
+   - Professional segmented control and compact variants
+   - High contrast, accessible, animated active state
+   ============================================================================== */
+
+.theme-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 3px;
+  gap: 2px;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  user-select: none;
+}
+
+.theme-toggle-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-toggle-option svg {
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle-option:hover {
+  color: var(--text-primary);
+}
+
+.theme-toggle-option.active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.theme-toggle-option.active.light-active {
+  color: #d97706; /* warm amber for sun */
+}
+
+[data-theme="light"] .theme-toggle-option.active.light-active {
+  color: #b45309;
+}
+
+.theme-toggle-option.active.dark-active {
+  color: #38bdf8; /* cyber sky blue for moon */
+}
+
+/* Floating / Header Compact Variant */
+.theme-toggle-compact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-compact-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--accent-blue);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-compact-btn svg {
+  font-size: 15px;
+  color: var(--accent-cyan);
+}
+
+/* Floating corner for Auth pages */
+.theme-toggle-floating {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 100;
+}
+
+@media (max-width: 520px) {
+  .theme-toggle-floating {
+    top: 14px;
+    right: 14px;
+  }
+}

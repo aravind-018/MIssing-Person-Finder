@@ -12,6 +12,7 @@ import {
   FaUser,
   FaBuilding,
 } from "react-icons/fa";
+import ThemeToggle from "../../components/common/ThemeToggle";
 
 function RegisterOfficer() {
   const navigate = useNavigate();
@@ -63,6 +64,11 @@ if (isAdmin) {
 
   return (
     <div className="register-officer-page">
+      {!isAdmin && (
+        <div className="theme-toggle-floating">
+          <ThemeToggle variant="compact" />
+        </div>
+      )}
       <div className="register-officer-card">
 
         {/* ================= HEADER ================= */}

@@ -12,6 +12,7 @@ import background from "../../assets/login-bg.jpg";
 import FloatingParticles from "../../components/FloatingParticles";
 import PatrolLogo from "../../components/common/PatrolLogo";
 import FormInput from "../../components/common/FormInput";
+import ThemeToggle from "../../components/common/ThemeToggle";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -52,6 +53,11 @@ function Login() {
       className="login-page"
       style={{ backgroundImage: `url(${background})` }}
     >
+      {/* Floating Theme Toggle */}
+      <div className="theme-toggle-floating">
+        <ThemeToggle variant="compact" />
+      </div>
+
       {/* Patrol Drone */}
       <PatrolLogo />
 

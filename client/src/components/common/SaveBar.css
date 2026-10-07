@@ -8,15 +8,15 @@
   gap: 20px;
   flex-wrap: wrap;
 
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--bg-surface);
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-card);
   border-radius: 16px;
 
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-lg);
 
   padding: 16px 22px;
 
@@ -30,7 +30,7 @@
   align-items: center;
   gap: 10px;
 
-  color: #cbd5e1;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -86,14 +86,15 @@
 }
 
 .save-bar-btn.reset {
-  color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
 }
 
 .save-bar-btn.reset:not(:disabled):hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--bg-surface-hover);
 }   
+
 @media (max-width: 600px) {
   .save-bar {
     flex-direction: column;

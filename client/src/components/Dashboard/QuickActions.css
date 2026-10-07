@@ -1,12 +1,14 @@
 .quick-actions {
-  background: #1f2937;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-card);
   border-radius: 16px;
   padding: 22px;
+  box-shadow: var(--shadow-md);
 }
 
 .quick-actions h2 {
   margin-bottom: 18px;
-  color: white;
+  color: var(--text-heading);
 }
 
 .action-card {
@@ -16,7 +18,9 @@
   padding: 16px;
   margin-bottom: 12px;
   border-radius: 12px;
-  background: #293445;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.25s ease;
 }
@@ -27,10 +31,12 @@
 
 .action-card:hover {
   transform: translateY(-3px);
-  background: #334155;
+  background: var(--bg-surface-hover);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-sm);
 }
 
 .action-icon {
   font-size: 22px;
-  color: #60a5fa;
+  color: var(--accent-blue);
 }

@@ -8,16 +8,20 @@
   box-sizing: border-box;
 }
 
+[data-theme="light"] .not-found-container {
+  background: radial-gradient(circle at center, #F8FAFC, #E2E8F0);
+}
+
 .not-found-card {
   width: 100%;
   max-width: 480px;
-  background: rgba(30, 41, 59, 0.85);
+  background: var(--bg-surface);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(124, 203, 255, 0.2);
+  border: 1px solid var(--border-card);
   border-radius: 20px;
   padding: 40px 24px;
   text-align: center;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .not-found-icon {
@@ -30,20 +34,20 @@
   font-family: "Orbitron", sans-serif;
   font-size: 4rem;
   font-weight: 800;
-  color: #7ccbff;
+  color: var(--text-title-accent);
   margin: 0 0 8px;
   letter-spacing: 3px;
   line-height: 1;
 }
 
 .not-found-title {
-  color: #f8fafc;
+  color: var(--text-heading);
   font-size: 1.5rem;
   margin: 0 0 12px;
 }
 
 .not-found-message {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 28px;
@@ -82,13 +86,13 @@
 }
 
 .not-found-btn.secondary-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #cbd5e1;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
 }
 
 .not-found-btn.secondary-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--bg-surface-hover);
 }
 
 @media (max-width: 480px) {
