@@ -72,3 +72,29 @@
   justify-content: flex-start;
   margin: 0;
 }
+
+[data-theme="light"] .status-missing {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+[data-theme="light"] .status-found {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+[data-theme="light"] .status-closed {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+[data-theme="light"] .status-pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+[data-theme="light"] .case-status-control button:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  opacity: 1;
+}

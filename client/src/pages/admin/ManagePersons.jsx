@@ -14,6 +14,7 @@ import {
 } from "../../services/personService";
 
 import PersonTable from "../../components/person/PersonTable";
+import "../../components/person/PersonTable.css";
 
 function ManagePersons() {
   const [persons, setPersons] = useState([]);
@@ -99,15 +100,7 @@ const filteredPersons = persons.filter(
 );
 
   return (
-    <div
-  style={{
-    padding: "30px",
-    background: "#0f172a",
-    minHeight: "100vh",
-    color: "#fff",
-  }}
->
-      
+    <div className="manage-persons-page">
       <h2 className="page-title">Manage Missing Persons</h2>
 
      <div className="search-container">
@@ -156,7 +149,7 @@ const filteredPersons = persons.filter(
   </button>
 </div>
 
-<p style={{ color: "#cbd5e1", marginBottom: "15px" }}>
+<p className="records-count">
   Showing <strong>{filteredPersons.length}</strong> of{" "}
   <strong>{persons.length}</strong> records
 </p>
